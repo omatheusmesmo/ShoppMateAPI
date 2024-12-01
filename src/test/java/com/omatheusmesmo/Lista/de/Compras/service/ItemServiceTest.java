@@ -9,6 +9,9 @@ import org.mockito.internal.matchers.Null;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -73,4 +76,28 @@ public class ItemServiceTest {
                 ()->itemService.verificaNomeQuantidade(itemQuantidadeMenorQueUm));
         assertEquals("Quantidade do item deve ser superior a zero!", exception.getMessage());
     }
+
+    @Test
+    public void testBuscarItemPresente(){
+        Item itemPresente = new Item("Feijão",1,"Alimentos");
+        itemPresente.setId(1L);
+
+        when(itemRepository.findById(itemPresente.getId())).thenReturn(Optional.of(itemPresente));
+
+        assertDoesNotThrow(()-> itemService.buscarItem(itemPresente));
+    }
+
+    @Test
+    public void testBuscarItemNaoPresente(){
+        Item itemNaoPresente = new Item("Feijão não presente",1,"Alimentos");
+        itemNaoPresente.setId(99L);
+
+        when(itemRepository.findById(itemNaoPresente.getId())).thenReturn(Optional.empty());
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                ()-> itemService.buscarItem(itemNaoPresente));
+        assertEquals("Item não encontrado",exception.getMessage());
+    }
+
+
 }
