@@ -21,7 +21,7 @@ public class ItemService {
         return item;
     }
 
-    private void verificaNomeQuantidade(Item item){
+    public void verificaNomeQuantidade(Item item){
         if (item.getNome() == null) {
             throw new IllegalArgumentException("O nome do item não pode ser nulo!");
         } else if (item.getNome().isBlank()) {
@@ -31,7 +31,7 @@ public class ItemService {
         if(item.getQuantidade() ==null){
             throw new IllegalArgumentException("Quantidade do item não pode ser nula!");
         } else if (item.getQuantidade() < 1) {
-            throw new IllegalArgumentException("Quantidade do item deve ser superior a 0");
+            throw new IllegalArgumentException("Quantidade do item deve ser superior a zero!");
         }
     }
 
