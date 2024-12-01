@@ -2,6 +2,7 @@ package com.omatheusmesmo.Lista.de.Compras.service;
 
 import com.omatheusmesmo.Lista.de.Compras.Entity.Item;
 import com.omatheusmesmo.Lista.de.Compras.repository.ItemRepository;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -9,6 +10,8 @@ import org.mockito.internal.matchers.Null;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -99,5 +102,45 @@ public class ItemServiceTest {
         assertEquals("Item não encontrado",exception.getMessage());
     }
 
+    @Test
+    public void testBuscarTodos(){
+        List<Item> todosItens = new ArrayList<>();
 
+        when(itemRepository.findAll()).thenReturn(todosItens);
+
+        assertDoesNotThrow(()->itemService.buscarTodos());
+    }
+
+    @Test
+    public void testEditarItem(){
+        Item itemEditado = new Item("Feijão",2,"Alimentos");
+        itemEditado.setId(1L);
+
+        when(itemRepository.findById(itemEditado.getId())).thenReturn(Optional.of(itemEditado));
+
+        when(itemRepository.save(itemEditado)).thenReturn(itemEditado);
+
+        assertDoesNotThrow(()->itemService.editarItem(itemEditado));
+
+        verify(itemRepository, times(1)).save(itemEditado);
+
+        Item resultado = itemService.editarItem(itemEditado);
+        assertEquals("Feijão", resultado.getNome());
+        assertEquals(2, resultado.getQuantidade());
+        assertEquals("Alimentos",resultado.getCategoria());
+    }
+
+    @Test
+    public void testRemoverItem(){
+        Long id = 1L;
+
+        Item item = new Item("Feijão", 1, "Alimentos");
+        item.setId(id);
+
+        when(itemRepository.findById(id)).thenReturn(Optional.of(item));
+
+        assertDoesNotThrow(()->itemService.removerItem(id));
+
+        verify(itemRepository, times(1)).deleteById(id);
+    }
 }
