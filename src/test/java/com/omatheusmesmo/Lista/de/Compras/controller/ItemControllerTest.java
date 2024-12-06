@@ -71,5 +71,19 @@ public class ItemControllerTest {
         verify(itemService, times(1)).removerItem(id);
     }
 
+    @Test
+    public void testPostEditarItem() throws Exception{
+        Item itemEditado = new Item("Feijão",1,"Alimentos");
+
+        when(itemService.editarItem(any(Item.class))).thenReturn(itemEditado);
+
+        mockMvc.perform(put("/item")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\":\"Feijão\",\"quantidade\":1,\"categoria\":\"Alimentos\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        "{'nome':'Feijão','quantidade':1,'categoria':'Alimentos'}"
+                ));
+    }
 
 }
