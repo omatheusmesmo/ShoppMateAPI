@@ -54,9 +54,9 @@ public class ItemControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"nome\":\"Feijão\",\"quantidade\":1,\"categoria\":\"Alimentos\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[" +
-                        "{'nome':'Feijão','quantidade':1,'categoria':'Alimentos'}" +
-                        "]"));
+                .andExpect(content().json(
+                        "{'nome':'Feijão','quantidade':1,'categoria':'Alimentos'}"
+                        ));
     }
 
     @Test
