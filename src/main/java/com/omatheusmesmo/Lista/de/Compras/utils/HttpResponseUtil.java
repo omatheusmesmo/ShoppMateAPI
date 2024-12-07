@@ -17,15 +17,15 @@ public class HttpResponseUtil {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public static ResponseEntity<Void> badRequest(){
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public static <T> ResponseEntity<T> badRequest(T body){
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    public static ResponseEntity<Void> notFound(){
+    public static <T> ResponseEntity<T> notFound(){
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    public static ResponseEntity<Void> internalServerError(){
+    public static <T> ResponseEntity<T> internalServerError(){
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
