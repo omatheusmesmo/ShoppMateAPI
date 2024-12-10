@@ -3,6 +3,7 @@ package com.omatheusmesmo.Lista.de.Compras.controller;
 import com.omatheusmesmo.Lista.de.Compras.Entity.Item;
 import com.omatheusmesmo.Lista.de.Compras.service.ItemService;
 import com.omatheusmesmo.Lista.de.Compras.utils.HttpResponseUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ public class ItemController {
     @Autowired
     ItemService itemService;
 
+    @Operation(summary = "Retornar todos os itens")
     @GetMapping("/item")
     public ResponseEntity<List<Item>> retornarTodosItens(){
         try {
@@ -26,6 +28,7 @@ public class ItemController {
         }
     }
 
+    @Operation(summary =  "Adicionar um novo item")
     @PostMapping("/item")
     public ResponseEntity<Item> adicionarItem(@RequestBody Item item){
         try {
@@ -36,6 +39,7 @@ public class ItemController {
         }
     }
 
+    @Operation(summary =  "Apagar um item pelo ID")
     @DeleteMapping("/item/{id}")
     public ResponseEntity<Void> removerItem(@PathVariable Long id){
         try {
@@ -46,6 +50,7 @@ public class ItemController {
         }
     }
 
+    @Operation(summary =  "Editar um item existente")
     @PutMapping("/item")
     public ResponseEntity<Item>  editarItem(@RequestBody Item item){
         try {
