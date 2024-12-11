@@ -5,6 +5,7 @@ import com.omatheusmesmo.Lista.de.Compras.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -13,8 +14,8 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario adicionarUser(Usuario usuario){
-        validarSeDadosEstaoNulosOuBrancos(usuario);
+    public Usuario adicionarUsuario(Usuario usuario){
+        validarSeDadosEstaoNulosOuEmBranco(usuario);
         validarSeUsuarioExiste(usuario.getEmail());
         usuarioRepository.save(usuario);
         return usuario;
@@ -28,18 +29,35 @@ public class UsuarioService {
         }
     }
 
-    public void validarSeDadosEstaoNulosOuBrancos(Usuario usuario){
+    public void validarSeDadosEstaoNulosOuEmBranco(Usuario usuario){
         String email = usuario.getEmail();
         if(email.isBlank()){
             throw new IllegalArgumentException("Preencha o e-mail corretamente!");
         }
         String senha = usuario.getSenha();
         if (senha.isBlank()){
-            throw new IllegalArgumentException("É necessário preencher a senha!")
+            throw new IllegalArgumentException("É necessário preencher a senha!");
         }
     }
-    public Usuario editarUsuario(Usuario usario){
-        usuarioRepository.save(usario);
-        return usario;
+    public Usuario editarUsuario(Usuario usuario){
+        buscarUsuarioPorId(usuario.getId());
+        validarSeDadosEstaoNulosOuEmBranco(usuario);
+        validarSeUsuarioExiste(usuario.getEmail());
+        usuarioRepository.save(usuario);
+        return usuario;
+    }
+
+    public Optional<Usuario> buscarUsuarioPorId(Long id){
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+        if (usuario.isPresent()){
+            return usuario;
+        }else{
+            throw new NoSuchElementException("Usuário inexistente!");
+        }
+    }
+
+    public void removerUsuario(Long id){
+        buscarUsuarioPorId(id);
+        usuarioRepository.deleteById(id);
     }
 }
