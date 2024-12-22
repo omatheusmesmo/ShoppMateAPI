@@ -1,12 +1,11 @@
 package com.omatheusmesmo.Lista.de.Compras.service;
 
-import com.omatheusmesmo.Lista.de.Compras.Entity.Item;
+import com.omatheusmesmo.Lista.de.Compras.entity.Item;
 import com.omatheusmesmo.Lista.de.Compras.repository.ItemRepository;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.Null;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -37,7 +36,7 @@ public class ItemServiceTest {
         Item item = itemService.adicionarItem(mockItem);
 
         assertNotNull(item);
-        assertEquals("Feijão",item.getNome());
+        assertEquals("Feijão",item.getName());
 
         verify(itemRepository, times(1)).save(mockItem);
     }
@@ -125,9 +124,9 @@ public class ItemServiceTest {
         verify(itemRepository, times(1)).save(itemEditado);
 
         Item resultado = itemService.editarItem(itemEditado);
-        assertEquals("Feijão", resultado.getNome());
-        assertEquals(2, resultado.getQuantidade());
-        assertEquals("Alimentos",resultado.getCategoria());
+        assertEquals("Feijão", resultado.getName());
+        assertEquals(2, resultado.getQuantity());
+        assertEquals("Alimentos",resultado.getCategory());
     }
 
     @Test

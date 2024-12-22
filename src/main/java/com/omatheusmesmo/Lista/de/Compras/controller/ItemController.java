@@ -1,6 +1,6 @@
 package com.omatheusmesmo.Lista.de.Compras.controller;
 
-import com.omatheusmesmo.Lista.de.Compras.Entity.Item;
+import com.omatheusmesmo.Lista.de.Compras.entity.Item;
 import com.omatheusmesmo.Lista.de.Compras.service.ItemService;
 import com.omatheusmesmo.Lista.de.Compras.utils.HttpResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;

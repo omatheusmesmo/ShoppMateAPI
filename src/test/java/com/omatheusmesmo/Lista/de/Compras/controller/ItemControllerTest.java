@@ -1,6 +1,6 @@
 package com.omatheusmesmo.Lista.de.Compras.controller;
 
-import com.omatheusmesmo.Lista.de.Compras.Entity.Item;
+import com.omatheusmesmo.Lista.de.Compras.entity.Item;
 import com.omatheusmesmo.Lista.de.Compras.service.ItemService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
