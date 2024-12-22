@@ -30,80 +30,80 @@ public class ItemControllerTest {
     private ItemService itemService;
 
     @Test
-    public void testGetRetornarTodosItens() throws Exception {
+    public void testGetAllItems() throws Exception {
         Item item1 = new Item("Feijão", 1, "Alimentos");
         Item item2 = new Item("Arroz", 2, "Alimentos");
-        List<Item> todosItens = Arrays.asList(item1, item2);
+        List<Item> allItems = Arrays.asList(item1, item2);
 
-        when(itemService.buscarTodos()).thenReturn(todosItens);
+        when(itemService.findAll()).thenReturn(allItems);
 
         mockMvc.perform(get("/item"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
-                        "{'nome':'Feijão','quantidade':1,'categoria':'Alimentos'}," +
-                        "{'nome':'Arroz','quantidade':2,'categoria':'Alimentos'}" +
+                        "{'name':'Feijão','quantity':1,'category':'Alimentos'}," +
+                        "{'name':'Arroz','quantity':2,'category':'Alimentos'}" +
                         "]"));
     }
 
     @Test
-    public void testPostAdicionarItem() throws Exception {
-        Item novoItem = new Item("Feijão", 1, "Alimentos");
+    public void testPostAddItem() throws Exception {
+        Item newItem = new Item("Feijão", 1, "Alimentos");
 
-        when(itemService.adicionarItem(any(Item.class))).thenReturn(novoItem);
+        when(itemService.addItem(any(Item.class))).thenReturn(newItem);
 
         mockMvc.perform(post("/item")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"nome\":\"Feijão\",\"quantidade\":1,\"categoria\":\"Alimentos\"}"))
+                        .content("{\"name\":\"Feijão\",\"quantity\":1,\"category\":\"Alimentos\"}"))
                 .andExpect(status().isCreated()) // Verificando status 201 Created
                 .andExpect(content().json(
-                        "{'nome':'Feijão','quantidade':1,'categoria':'Alimentos'}"
+                        "{'name':'Feijão','quantity':1,'category':'Alimentos'}"
                 ));
     }
 
     @Test
-    public void testDeleteRemoverItem() throws Exception {
+    public void testDeleteRemoveItem() throws Exception {
         Long id = 1L;
 
-        Mockito.doNothing().when(itemService).removerItem(id);
+        Mockito.doNothing().when(itemService).removeItem(id);
 
         mockMvc.perform(delete("/item/" + id))
                 .andExpect(status().isNoContent());
 
-        verify(itemService, times(1)).removerItem(id);
+        verify(itemService, times(1)).removeItem(id);
     }
 
     @Test
-    public void testPutEditarItem() throws Exception {
-        Item itemEditado = new Item("Feijão", 1, "Alimentos");
+    public void testPutEditItem() throws Exception {
+        Item editedItem = new Item("Feijão", 1, "Alimentos");
 
-        when(itemService.editarItem(any(Item.class))).thenReturn(itemEditado);
+        when(itemService.editItem(any(Item.class))).thenReturn(editedItem);
 
         mockMvc.perform(put("/item")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"nome\":\"Feijão\",\"quantidade\":1,\"categoria\":\"Alimentos\"}"))
+                        .content("{\"name\":\"Feijão\",\"quantity\":1,\"category\":\"Alimentos\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(
-                        "{'nome':'Feijão','quantidade':1,'categoria':'Alimentos'}"
+                        "{'name':'Feijão','quantity':1,'category':'Alimentos'}"
                 ));
     }
 
     @Test
-    public void testPostAdicionarItem_BadRequest() throws Exception {
-        when(itemService.adicionarItem(any(Item.class))).thenThrow(new IllegalArgumentException());
+    public void testPostAddItem_BadRequest() throws Exception {
+        when(itemService.addItem(any(Item.class))).thenThrow(new IllegalArgumentException());
 
         mockMvc.perform(post("/item")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"nome\":\"\",\"quantidade\":0,\"categoria\":\"\"}"))
+                        .content("{\"name\":\"\",\"quantity\":0,\"category\":\"\"}"))
                 .andExpect(status().isBadRequest()); // Verificando status 400 Bad Request
     }
 
     @Test
-    public void testPutEditarItem_NotFound() throws Exception {
-        doThrow(new NoSuchElementException()).when(itemService).editarItem(any(Item.class));
+    public void testPutEditItem_NotFound() throws Exception {
+        doThrow(new NoSuchElementException()).when(itemService).editItem(any(Item.class));
 
         mockMvc.perform(put("/item")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"nome\":\"Feijão\",\"quantidade\":1,\"categoria\":\"Alimentos\"}"))
+                        .content("{\"name\":\"Feijão\",\"quantity\":1,\"category\":\"Alimentos\"}"))
                 .andExpect(status().isNotFound()); // Verificando status 404 Not Found
     }
 }

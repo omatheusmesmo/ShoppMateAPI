@@ -28,109 +28,109 @@ public class ItemServiceTest {
     private ItemService itemService;
 
     @Test
-    public void testAdicionarItem(){
-        Item mockItem = new Item("Feijão",1,"Alimentos");
+    public void testAddItem() {
+        Item mockItem = new Item("Feijão", 1, "Alimentos");
 
         when(itemRepository.save(any(Item.class))).thenReturn(mockItem);
 
-        Item item = itemService.adicionarItem(mockItem);
+        Item item = itemService.addItem(mockItem);
 
         assertNotNull(item);
-        assertEquals("Feijão",item.getName());
+        assertEquals("Feijão", item.getName());
 
         verify(itemRepository, times(1)).save(mockItem);
     }
 
     @Test
-    public void testVerificaNomeQuantidadeItemValido(){
-        Item itemValido = new Item("Feijão",1,"Alimentos");
-        assertDoesNotThrow(()->itemService.verificaNomeQuantidade(itemValido));
+    public void testCheckNameAndQuantityValidItem() {
+        Item validItem = new Item("Feijão", 1, "Alimentos");
+        assertDoesNotThrow(() -> itemService.checkNameAndQuantity(validItem));
     }
 
     @Test
-    public void testVerificaNomeQuantidadeItemNomeNulo(){
-        Item itemNomeNulo = new Item(null,1,"Alimentos");
+    public void testCheckNameAndQuantityItemNameNull() {
+        Item itemNameNull = new Item(null, 1, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                ()->itemService.verificaNomeQuantidade(itemNomeNulo));
+                () -> itemService.checkNameAndQuantity(itemNameNull));
         assertEquals("O nome do item não pode ser nulo!", exception.getMessage());
     }
 
     @Test
-    public void testVerificaNomeQuantidadeItemNomeEmBranco(){
-        Item itemNomeEmBranco = new Item(" ",1,"Alimentos");
+    public void testCheckNameAndQuantityItemNameBlank() {
+        Item itemNameBlank = new Item(" ", 1, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                ()->itemService.verificaNomeQuantidade(itemNomeEmBranco));
+                () -> itemService.checkNameAndQuantity(itemNameBlank));
         assertEquals("Preencha o nome do item corretamente!", exception.getMessage());
     }
 
     @Test
-    public void testVerificaNomeQuantidadeNula(){
-        Item itemQuantidadeNula = new Item("Feijão", null,"Alimentos");
+    public void testCheckNameAndQuantityNullQuantity() {
+        Item nullQuantityItem = new Item("Feijão", null, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                ()->itemService.verificaNomeQuantidade(itemQuantidadeNula));
+                () -> itemService.checkNameAndQuantity(nullQuantityItem));
         assertEquals("Quantidade do item não pode ser nula!", exception.getMessage());
     }
 
     @Test
-    public void testVerificaNomeQuantidadeMenorQueUm(){
-        Item itemQuantidadeMenorQueUm = new Item("Feijão", 0,"Alimentos");
+    public void testCheckNameAndQuantityLessThanOneQuantity() {
+        Item lessThanOneQuantityItem = new Item("Feijão", 0, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                ()->itemService.verificaNomeQuantidade(itemQuantidadeMenorQueUm));
+                () -> itemService.checkNameAndQuantity(lessThanOneQuantityItem));
         assertEquals("Quantidade do item deve ser superior a zero!", exception.getMessage());
     }
 
     @Test
-    public void testBuscarItemPresente(){
-        Item itemPresente = new Item("Feijão",1,"Alimentos");
-        itemPresente.setId(1L);
+    public void testFindItemPresent() {
+        Item presentItem = new Item("Feijão", 1, "Alimentos");
+        presentItem.setId(1L);
 
-        when(itemRepository.findById(itemPresente.getId())).thenReturn(Optional.of(itemPresente));
+        when(itemRepository.findById(presentItem.getId())).thenReturn(Optional.of(presentItem));
 
-        assertDoesNotThrow(()-> itemService.buscarItem(itemPresente));
+        assertDoesNotThrow(() -> itemService.findItem(presentItem));
     }
 
     @Test
-    public void testBuscarItemNaoPresente(){
-        Item itemNaoPresente = new Item("Feijão não presente",1,"Alimentos");
-        itemNaoPresente.setId(99L);
+    public void testFindItemNotPresent() {
+        Item notPresentItem = new Item("Feijão não presente", 1, "Alimentos");
+        notPresentItem.setId(99L);
 
-        when(itemRepository.findById(itemNaoPresente.getId())).thenReturn(Optional.empty());
+        when(itemRepository.findById(notPresentItem.getId())).thenReturn(Optional.empty());
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class,
-                ()-> itemService.buscarItem(itemNaoPresente));
-        assertEquals("Item não encontrado",exception.getMessage());
+                () -> itemService.findItem(notPresentItem));
+        assertEquals("Item não encontrado", exception.getMessage());
     }
 
     @Test
-    public void testBuscarTodos(){
-        List<Item> todosItens = new ArrayList<>();
+    public void testFindAll() {
+        List<Item> allItems = new ArrayList<>();
 
-        when(itemRepository.findAll()).thenReturn(todosItens);
+        when(itemRepository.findAll()).thenReturn(allItems);
 
-        assertDoesNotThrow(()->itemService.buscarTodos());
+        assertDoesNotThrow(() -> itemService.findAll());
     }
 
     @Test
-    public void testEditarItem(){
-        Item itemEditado = new Item("Feijão",2,"Alimentos");
-        itemEditado.setId(1L);
+    public void testEditItem() {
+        Item editedItem = new Item("Feijão", 2, "Alimentos");
+        editedItem.setId(1L);
 
-        when(itemRepository.findById(itemEditado.getId())).thenReturn(Optional.of(itemEditado));
+        when(itemRepository.findById(editedItem.getId())).thenReturn(Optional.of(editedItem));
 
-        when(itemRepository.save(itemEditado)).thenReturn(itemEditado);
+        when(itemRepository.save(editedItem)).thenReturn(editedItem);
 
-        assertDoesNotThrow(()->itemService.editarItem(itemEditado));
+        assertDoesNotThrow(() -> itemService.editItem(editedItem));
 
-        verify(itemRepository, times(1)).save(itemEditado);
+        verify(itemRepository, times(1)).save(editedItem);
 
-        Item resultado = itemService.editarItem(itemEditado);
-        assertEquals("Feijão", resultado.getName());
-        assertEquals(2, resultado.getQuantity());
-        assertEquals("Alimentos",resultado.getCategory());
+        Item result = itemService.editItem(editedItem);
+        assertEquals("Feijão", result.getName());
+        assertEquals(2, result.getQuantity());
+        assertEquals("Alimentos", result.getCategory());
     }
 
     @Test
-    public void testRemoverItem(){
+    public void testRemoveItem() {
         Long id = 1L;
 
         Item item = new Item("Feijão", 1, "Alimentos");
@@ -138,7 +138,7 @@ public class ItemServiceTest {
 
         when(itemRepository.findById(id)).thenReturn(Optional.of(item));
 
-        assertDoesNotThrow(()->itemService.removerItem(id));
+        assertDoesNotThrow(() -> itemService.removeItem(id));
 
         verify(itemRepository, times(1)).deleteById(id);
     }
