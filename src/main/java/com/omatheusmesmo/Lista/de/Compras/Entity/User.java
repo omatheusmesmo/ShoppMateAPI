@@ -17,36 +17,36 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Usuario implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String nomeCompleto;
+    private String fullName;
 
     @Column(unique = true, length = 100, nullable = false)
     private String email;
 
     @Column(nullable = false)
-    private String senha;
+    private String password;
 
-    private String papel;
+    private String role;
 
     @CreationTimestamp
     @Column(updatable = false, name="created_at")
-    private Date criadoEm;
+    private Date createdAt;
 
     @CreationTimestamp
     @Column(name="updated_at")
-    private Date atualizadoEm;
+    private Date updatedAt;
 
     //private Boolean ativo = true;
 
-    public Usuario(String email, String senha, String papel) {
+    public User(String email, String password, String role) {
         this.email = email;
-        this.senha = senha;
+        this.password = password;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return senha;
+        return password;
     }
 
     @Override
