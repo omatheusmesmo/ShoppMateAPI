@@ -1,4 +1,4 @@
-package com.omatheusmesmo.Lista.de.Compras.entity;
+package com.omatheusmesmo.Lista.de.Compras.Entity;
 
 
 import jakarta.persistence.*;
@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import lombok.experimental.Accessors;
 
 import java.util.Collection;
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@Accessors(chain = true)
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
