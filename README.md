@@ -4,7 +4,37 @@ Lista de Compras API
 Descrição
 ---------
 
-A Lista de Compras API é uma aplicação para gerenciar itens de uma lista de compras. A API permite adicionar, editar, remover e buscar itens na lista, oferecendo uma interface RESTful para interações com os dados.
+A Lista de Compras API é uma solução moderna e eficiente para gerenciar itens de uma lista de compras, projetada para facilitar a vida dos usuários. A aplicação oferece uma interface RESTful robusta, permitindo a manipulação completa dos itens na lista, incluindo adição, edição, remoção e busca. Além disso, a API possui funcionalidades avançadas de autenticação e autorização de usuários, garantindo segurança e privacidade dos dados.
+
+Destaques do Projeto
+-----------------
+
+- **Gestão Completa de Itens:** Adicione, edite, remova e busque itens de maneira simples e eficiente.
+
+- **Autenticação e Autorização:** Utiliza JWT (JSON Web Token) para autenticação segura e controle de acesso.
+
+- **Documentação Interativa:** Integrada com SpringDoc e Swagger para documentação clara e interativa da API.
+
+- **Versionamento de Banco de Dados:** Flyway para migrações de banco de dados, garantindo consistência e facilidade de atualização.
+
+Tecnologias Utilizadas
+---------
+
+**Frameworks:** *Spring Boot, Spring Data JPA, Spring Security, SpringDoc*
+
+**Testes:** *JUnit, Mockito, Spring Boot Test*
+
+**Banco de dados:** *H2, PostgreSQL*
+
+**Ferramentas de Construção:** *Maven*
+
+**Utilitários:** *Lombok, Flyway*
+
+**Autenticação e Autorização:** *JWT (JSON Web Token)*
+
+**Documentação:** *SpringDoc, Swagger*
+
+**Cobertura de Testes:** *JaCoCo*
 
 Endpoints
 ---------
@@ -132,11 +162,13 @@ Estrutura do Projeto
 Melhorias Futuras
 -----------------
 
--   Implementar autenticação e autorização.
+-   Implementação de Cache para aumentar a performance.
 
 -   Adicionar paginação e filtros nos endpoints de busca.
 
--   Melhorar a documentação com Swagger/OpenAPI.
+-   Adicionar Logging centralizado.
+  
+-   Configurar pipelines de CI/CD para automatizar builds, testes e deploys.
 
 Contribuição
 ------------
