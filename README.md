@@ -179,3 +179,4 @@ Licença
 -------
 
 Este projeto está licenciado sob a Licença MIT. Veja o arquivo LICENSE para mais detalhes.
+ 
