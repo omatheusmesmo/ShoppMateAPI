@@ -1,10 +1,11 @@
 package com.omatheusmesmo.Lista.de.Compras.service;
 
-import com.omatheusmesmo.Lista.de.Compras.Entity.User;
+import com.omatheusmesmo.Lista.de.Compras.entity.User;
 import com.omatheusmesmo.Lista.de.Compras.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -59,5 +60,10 @@ public class UserService {
     public void removeUser(Long id) {
         findUserById(id);
         userRepository.deleteById(id);
+    }
+
+    public List<User> returnAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users;
     }
 }

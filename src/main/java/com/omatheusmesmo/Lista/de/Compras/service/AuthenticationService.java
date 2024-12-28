@@ -7,7 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.omatheusmesmo.Lista.de.Compras.Entity.User;
+import com.omatheusmesmo.Lista.de.Compras.entity.User;
 
 @Service
 public class AuthenticationService {

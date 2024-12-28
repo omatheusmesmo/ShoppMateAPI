@@ -5,7 +5,7 @@ import com.omatheusmesmo.Lista.de.Compras.dtos.RegisterUserDto;
 import com.omatheusmesmo.Lista.de.Compras.responses.LoginResponse;
 import com.omatheusmesmo.Lista.de.Compras.service.AuthenticationService;
 import com.omatheusmesmo.Lista.de.Compras.service.JwtService;
-import com.omatheusmesmo.Lista.de.Compras.Entity.User;
+import com.omatheusmesmo.Lista.de.Compras.entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

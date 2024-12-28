@@ -1,4 +1,4 @@
-package com.omatheusmesmo.Lista.de.Compras.Entity;
+package com.omatheusmesmo.Lista.de.Compras.entity;
 
 
 import jakarta.persistence.*;
