@@ -31,11 +31,11 @@ public class UserService {
 
     public void validateIfDataIsNullOrEmpty(User user) {
         String email = user.getEmail();
-        if (email.isBlank()) {
+        if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Preencha o e-mail corretamente!");
         }
         String password = user.getPassword();
-        if (password.isBlank()) {
+        if ( password == null || password.isBlank()) {
             throw new IllegalArgumentException("É necessário preencher a senha!");
         }
     }
@@ -43,7 +43,6 @@ public class UserService {
     public User editUser(User user) {
         findUserById(user.getId());
         validateIfDataIsNullOrEmpty(user);
-        validateIfUserExists(user.getEmail());
         userRepository.save(user);
         return user;
     }
