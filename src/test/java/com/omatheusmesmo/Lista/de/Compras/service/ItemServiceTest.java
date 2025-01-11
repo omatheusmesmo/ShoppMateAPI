@@ -2,23 +2,21 @@ package com.omatheusmesmo.Lista.de.Compras.service;
 
 import com.omatheusmesmo.Lista.de.Compras.entity.Item;
 import com.omatheusmesmo.Lista.de.Compras.repository.ItemRepository;
-
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ActiveProfiles("test")
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class ItemServiceTest {
 
     @Mock
@@ -45,6 +43,7 @@ public class ItemServiceTest {
     public void testCheckNameAndQuantityValidItem() {
         Item validItem = new Item("Feijão", 1, "Alimentos");
         assertDoesNotThrow(() -> itemService.checkNameAndQuantity(validItem));
+        verifyNoInteractions(itemRepository);
     }
 
     @Test
@@ -86,7 +85,10 @@ public class ItemServiceTest {
 
         when(itemRepository.findById(presentItem.getId())).thenReturn(Optional.of(presentItem));
 
-        assertDoesNotThrow(() -> itemService.findItem(presentItem));
+        Optional<Item> result = itemService.findItem(presentItem);
+
+        assertNotNull(result);
+        verify(itemRepository, times(1)).findById(presentItem.getId());
     }
 
     @Test
@@ -103,11 +105,21 @@ public class ItemServiceTest {
 
     @Test
     public void testFindAll() {
-        List<Item> allItems = new ArrayList<>();
+        List<Item> allItems = List.of(
+                new Item("Feijão", 1, "Alimentos"),
+                new Item("Arroz", 2, "Alimentos")
+        );
 
         when(itemRepository.findAll()).thenReturn(allItems);
 
-        assertDoesNotThrow(() -> itemService.findAll());
+        List<Item> result = itemService.findAll();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Feijão", result.get(0).getName());
+        assertEquals("Arroz", result.get(1).getName());
+
+        verify(itemRepository, times(1)).findAll();
     }
 
     @Test
@@ -116,17 +128,16 @@ public class ItemServiceTest {
         editedItem.setId(1L);
 
         when(itemRepository.findById(editedItem.getId())).thenReturn(Optional.of(editedItem));
-
         when(itemRepository.save(editedItem)).thenReturn(editedItem);
 
-        assertDoesNotThrow(() -> itemService.editItem(editedItem));
-
-        verify(itemRepository, times(1)).save(editedItem);
-
         Item result = itemService.editItem(editedItem);
+
+        assertNotNull(result);
         assertEquals("Feijão", result.getName());
         assertEquals(2, result.getQuantity());
         assertEquals("Alimentos", result.getCategory());
+
+        verify(itemRepository, times(1)).save(editedItem);
     }
 
     @Test
