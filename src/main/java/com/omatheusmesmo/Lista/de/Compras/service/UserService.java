@@ -1,68 +1,79 @@
 package com.omatheusmesmo.Lista.de.Compras.service;
 
+
 import com.omatheusmesmo.Lista.de.Compras.entity.User;
 import com.omatheusmesmo.Lista.de.Compras.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-    public User addUser(User user) {
+    public User addUser(User user){
         validateIfDataIsNullOrEmpty(user);
         validateIfUserExists(user.getEmail());
+        encryptPassword(user);
         userRepository.save(user);
         return user;
     }
 
-    public void validateIfUserExists(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            throw new IllegalArgumentException("e-mail já está sendo utilizado!");
-        }
+    private void encryptPassword(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
 
-    public void validateIfDataIsNullOrEmpty(User user) {
-        String email = user.getEmail();
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Preencha o e-mail corretamente!");
-        }
-        String password = user.getPassword();
-        if ( password == null || password.isBlank()) {
-            throw new IllegalArgumentException("É necessário preencher a senha!");
-        }
-    }
-
-    public User editUser(User user) {
+    public User editUser(User user){
         findUserById(user.getId());
         validateIfDataIsNullOrEmpty(user);
+        encryptPassword(user);
         userRepository.save(user);
         return user;
     }
 
-    public Optional<User> findUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return user;
-        } else {
-            throw new NoSuchElementException("Usuário inexistente!");
-        }
-    }
-
-    public void removeUser(Long id) {
+    public void removeUser(Long id){
         findUserById(id);
         userRepository.deleteById(id);
     }
 
+    protected void findUserById(Long id) {
+        if(userRepository.findById(id).isEmpty()){
+            throw new NoSuchElementException("User not found!");
+        }
+    }
+
+    protected void validateIfUserExists(String email) {
+        if(userRepository.findByEmail(email).isPresent()){
+            throw new IllegalArgumentException("E-mail is already being used!");
+        }
+    }
+
+    protected void validateIfDataIsNullOrEmpty(User user) {
+        if(user.getEmail() == null || user.getEmail().isBlank()){
+            throw new IllegalArgumentException("E-mail is required!");
+        }
+
+        if(user.getPassword() == null || user.getPassword().isBlank()){
+            throw new IllegalArgumentException("Password is required!");
+        }
+    }
+
+    public List<User> getUsers() {
+        return userRepository.findAll();
+    }
+
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElseThrow();
+    }
+
     public List<User> returnAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users;
+        return userRepository.findAll();
     }
 }

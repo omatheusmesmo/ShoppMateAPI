@@ -2,12 +2,16 @@ package com.omatheusmesmo.Lista.de.Compras.controller;
 
 import com.omatheusmesmo.Lista.de.Compras.entity.Item;
 import com.omatheusmesmo.Lista.de.Compras.service.ItemService;
+import com.omatheusmesmo.Lista.de.Compras.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -20,8 +24,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ItemController.class)
-public class ItemControllerTest {
+@WebMvcTest(controllers = ItemController.class)
+@AutoConfigureMockMvc(addFilters = false)
+class ItemControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -29,8 +34,15 @@ public class ItemControllerTest {
     @MockBean
     private ItemService itemService;
 
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private UserDetailsService userDetailsService;
+
     @Test
-    public void testGetAllItems() throws Exception {
+    @WithMockUser
+    void testGetAllItems() throws Exception {
         Item item1 = new Item("Feijão", 1, "Alimentos");
         Item item2 = new Item("Arroz", 2, "Alimentos");
         List<Item> allItems = Arrays.asList(item1, item2);
@@ -46,7 +58,8 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void testPostAddItem() throws Exception {
+    @WithMockUser
+    void testPostAddItem() throws Exception {
         Item newItem = new Item("Feijão", 1, "Alimentos");
 
         when(itemService.addItem(any(Item.class))).thenReturn(newItem);
@@ -54,14 +67,15 @@ public class ItemControllerTest {
         mockMvc.perform(post("/item")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Feijão\",\"quantity\":1,\"category\":\"Alimentos\"}"))
-                .andExpect(status().isCreated()) // Verificando status 201 Created
+                .andExpect(status().isCreated())
                 .andExpect(content().json(
                         "{'name':'Feijão','quantity':1,'category':'Alimentos'}"
                 ));
     }
 
     @Test
-    public void testDeleteRemoveItem() throws Exception {
+    @WithMockUser
+    void testDeleteRemoveItem() throws Exception {
         Long id = 1L;
 
         Mockito.doNothing().when(itemService).removeItem(id);
@@ -73,7 +87,8 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void testPutEditItem() throws Exception {
+    @WithMockUser
+    void testPutEditItem() throws Exception {
         Item editedItem = new Item("Feijão", 1, "Alimentos");
 
         when(itemService.editItem(any(Item.class))).thenReturn(editedItem);
@@ -88,22 +103,24 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void testPostAddItem_BadRequest() throws Exception {
+    @WithMockUser
+    void testPostAddItem_BadRequest() throws Exception {
         when(itemService.addItem(any(Item.class))).thenThrow(new IllegalArgumentException());
 
         mockMvc.perform(post("/item")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\",\"quantity\":0,\"category\":\"\"}"))
-                .andExpect(status().isBadRequest()); // Verificando status 400 Bad Request
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testPutEditItem_NotFound() throws Exception {
+    @WithMockUser
+    void testPutEditItem_NotFound() throws Exception {
         doThrow(new NoSuchElementException()).when(itemService).editItem(any(Item.class));
 
         mockMvc.perform(put("/item")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Feijão\",\"quantity\":1,\"category\":\"Alimentos\"}"))
-                .andExpect(status().isNotFound()); // Verificando status 404 Not Found
+                .andExpect(status().isNotFound());
     }
 }
