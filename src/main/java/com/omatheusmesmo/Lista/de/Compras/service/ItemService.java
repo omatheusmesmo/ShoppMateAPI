@@ -23,15 +23,15 @@ public class ItemService {
 
     public void checkNameAndQuantity(Item item) {
         if (item.getName() == null) {
-            throw new IllegalArgumentException("O nome do item não pode ser nulo!");
+            throw new IllegalArgumentException("The item name cannot be null!");
         } else if (item.getName().isBlank()) {
-            throw new IllegalArgumentException("Preencha o nome do item corretamente!");
+            throw new IllegalArgumentException("Enter a valid item name!");
         }
 
         if (item.getQuantity() == null) {
-            throw new IllegalArgumentException("Quantidade do item não pode ser nula!");
+            throw new IllegalArgumentException("The item quantity cannot be null!");
         } else if (item.getQuantity() < 1) {
-            throw new IllegalArgumentException("Quantidade do item deve ser superior a zero!");
+            throw new IllegalArgumentException("Quantity must be greater than 0!");
         }
     }
 
@@ -40,7 +40,7 @@ public class ItemService {
         if (foundItem.isPresent()) {
             return foundItem;
         } else {
-            throw new NoSuchElementException("Item não encontrado");
+            throw new NoSuchElementException("Item not found");
         }
     }
 
@@ -49,7 +49,7 @@ public class ItemService {
         if (foundItem.isPresent()) {
             return foundItem;
         } else {
-            throw new NoSuchElementException("Item não encontrado");
+            throw new NoSuchElementException("Item not found");
         }
     }
 

@@ -51,7 +51,7 @@ public class ItemServiceTest {
         Item itemNameNull = new Item(null, 1, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> itemService.checkNameAndQuantity(itemNameNull));
-        assertEquals("O nome do item não pode ser nulo!", exception.getMessage());
+        assertEquals("The item name cannot be null!", exception.getMessage());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class ItemServiceTest {
         Item itemNameBlank = new Item(" ", 1, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> itemService.checkNameAndQuantity(itemNameBlank));
-        assertEquals("Preencha o nome do item corretamente!", exception.getMessage());
+        assertEquals("Enter a valid item name!", exception.getMessage());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ItemServiceTest {
         Item nullQuantityItem = new Item("Feijão", null, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> itemService.checkNameAndQuantity(nullQuantityItem));
-        assertEquals("Quantidade do item não pode ser nula!", exception.getMessage());
+        assertEquals("The item quantity cannot be null!", exception.getMessage());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class ItemServiceTest {
         Item lessThanOneQuantityItem = new Item("Feijão", 0, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> itemService.checkNameAndQuantity(lessThanOneQuantityItem));
-        assertEquals("Quantidade do item deve ser superior a zero!", exception.getMessage());
+        assertEquals("Quantity must be greater than 0!", exception.getMessage());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class ItemServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class,
                 () -> itemService.findItem(notPresentItem));
-        assertEquals("Item não encontrado", exception.getMessage());
+        assertEquals("Item not found", exception.getMessage());
     }
 
     @Test
