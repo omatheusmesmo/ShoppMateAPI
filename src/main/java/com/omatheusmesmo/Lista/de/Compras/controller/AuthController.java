@@ -4,6 +4,7 @@ import com.omatheusmesmo.Lista.de.Compras.dtos.LoginRequest;
 import com.omatheusmesmo.Lista.de.Compras.entity.User;
 import com.omatheusmesmo.Lista.de.Compras.service.JwtService;
 import com.omatheusmesmo.Lista.de.Compras.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,12 +26,14 @@ public class AuthController {
     @Autowired
     UserDetailsService userDetailsService;
 
+    @Operation(summary = "Register a User")
     @PostMapping("/register/userDetailsService")
     public ResponseEntity<User> registerUser(@RequestBody User user){
         userService.addUser(user);
         return ResponseEntity.ok(user);
     }
 
+    @Operation(summary = "User's login")
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest){
 

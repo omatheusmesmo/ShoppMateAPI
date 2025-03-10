@@ -18,7 +18,7 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @Operation(summary = "Retornar todos os itens")
+    @Operation(summary = "Return all items")
     @GetMapping
     public ResponseEntity<List<Item>> getAllItems() {
         try {
@@ -29,7 +29,7 @@ public class ItemController {
         }
     }
 
-    @Operation(summary = "Adicionar um novo item")
+    @Operation(summary = "Add a new item")
     @PostMapping
     public ResponseEntity<Item> addItem(@RequestBody Item item) {
         try {
@@ -40,7 +40,7 @@ public class ItemController {
         }
     }
 
-    @Operation(summary = "Apagar um item pelo ID")
+    @Operation(summary = "Delete a item by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         try {
@@ -51,7 +51,7 @@ public class ItemController {
         }
     }
 
-    @Operation(summary = "Editar um item existente")
+    @Operation(summary = "Update a item")
     @PutMapping
     public ResponseEntity<Item> updateItem(@RequestBody Item item) {
         try {
