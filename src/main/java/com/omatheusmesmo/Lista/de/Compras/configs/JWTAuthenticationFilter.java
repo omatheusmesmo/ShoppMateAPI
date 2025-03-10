@@ -47,7 +47,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = jwtService.decryptToken(token).getSubject();
             } catch (Exception e) {
-                logger.error("Falha ao validar o token JWT ", e);
+                logger.error("Failed to validate JWT Token ", e);
             }
         }
 
@@ -67,7 +67,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }catch (UsernameNotFoundException e){
-                logger.error("Usuário não encontrado", e);
+                logger.error("User not found", e);
             }
         }
 

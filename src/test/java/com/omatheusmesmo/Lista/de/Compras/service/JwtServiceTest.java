@@ -38,15 +38,6 @@ class JwtServiceTest {
         assertFalse(token.isEmpty(), "Token should not be empty");
     }
 
-
-    void shouldValidateValidToken() {
-        String token = jwtService.generateToken(userDetails);
-
-        boolean isValid = jwtService.validateToken(token);
-
-        assertTrue(isValid, "The token should be valid");
-    }
-
     @Test
     void shouldFailToValidateInvalidToken() {
         String invalidToken = "invalid_token";
@@ -85,7 +76,6 @@ class JwtServiceTest {
         assertNotNull(keyPair.getPublic(), "Public key should not be null");
     }
 
-
     void shouldThrowExceptionWhenKeyGenerationFails() {
         // Simulando falha na geração de chave para testar o manejo de exceção
         JwtService faultyJwtService = new JwtService() {
@@ -97,7 +87,6 @@ class JwtServiceTest {
 
         assertThrows(JwtServiceException.class, faultyJwtService::generateRSAKeys, "Key generation failure should throw exception");
     }
-
 
     void shouldBuildTokenWithCorrectExpirationTime() {
         String token = jwtService.generateToken(userDetails);
@@ -113,4 +102,13 @@ class JwtServiceTest {
             fail("Parsing the generated token failed", e);
         }
     }
+
+    void shouldValidateValidToken() {
+        String token = jwtService.generateToken(userDetails);
+
+        boolean isValid = jwtService.validateToken(token);
+
+        assertTrue(isValid, "The token should be valid");
+    }
+
 }

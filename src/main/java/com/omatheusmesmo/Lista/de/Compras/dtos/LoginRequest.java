@@ -1,4 +1,3 @@
-// auth/src/main/java/org/auth/dto/LoginRequest.java
 package com.omatheusmesmo.Lista.de.Compras.dtos;
 
 public class LoginRequest {
