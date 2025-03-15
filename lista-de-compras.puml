@@ -1,0 +1,84 @@
+@startuml
+!theme vibrant
+class List {
+    Long idList <<PK>>
+    String name
+    User owner
+    LocalDateTime createdAt
+    LocalDateTime updatedAt
+    Boolean deleted
+    List<ListItem> listItems
+    List<ListUserPermission> userPermissions
+}
+
+class ListItem {
+    List list
+    Item item
+    Integer quantidade
+    Boolean comprado
+    LocalDateTime createdAt
+    LocalDateTime updatedAt
+    Boolean deleted
+}
+
+class User {
+    Long idUser <<PK>>
+    LocalDateTime createdAt
+    String email
+    String fullName
+    String password
+    String role
+    LocalDateTime updatedAt
+    Boolean deleted
+}
+
+class Item {
+    Long idItem <<PK>>
+    String name
+    Category category
+    Unit unit
+    LocalDateTime createdAt
+    LocalDateTime updatedAt
+    Boolean deleted
+    List<ListItem> listItems
+}
+
+class Category {
+    Long idCategory <<PK>>
+    String name
+    LocalDateTime createdAt
+    LocalDateTime updatedAt
+    Boolean deleted
+    List<Item> itemDefinitions
+}
+
+class Unit {
+    Long idUnit <<PK>>
+    String name
+    String symbol
+    LocalDateTime createdAt
+    LocalDateTime updatedAt
+    Boolean deleted
+    List<Item> items
+}
+
+class ListUserPermission {
+    List list
+    User user
+    String permissionType
+    Boolean deleted
+}
+
+User "1" -- "0..*" List : owns
+List "1" *-- "0..*" ListItem : contains
+Item "1" o-- "0..*" ListItem : appears_in
+Category "1" -- "0..*" Item : categorizes
+Unit "1" -- "0..*" Item : measures
+List "1" -- "0..*" ListUserPermission : permissions
+ListUserPermission "1" -- "1" User : assigned_to
+ListUserPermission "1" -- "1" List : applies_to
+ListItem "1" -- "1" List : list
+ListItem "1" -- "1" Item : item
+Item "1" -- "1" Category : categorized_by
+Item "1" -- "1" Unit : measured_in
+@enduml
