@@ -1,4 +1,4 @@
-package com.omatheusmesmo.Lista.de.Compras.service;
+package com.omatheusmesmo.shoppinglist.service;
 
 public class JwtServiceException extends RuntimeException {
     public JwtServiceException(String message, Throwable cause) {

@@ -1,6 +1,6 @@
-package com.omatheusmesmo.Lista.de.Compras.configs;
+package com.omatheusmesmo.shoppinglist.configs;
 
-import com.omatheusmesmo.Lista.de.Compras.service.JwtService;
+import com.omatheusmesmo.shoppinglist.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

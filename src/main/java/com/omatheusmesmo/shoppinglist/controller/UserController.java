@@ -1,7 +1,7 @@
-package com.omatheusmesmo.Lista.de.Compras.controller;
+package com.omatheusmesmo.shoppinglist.controller;
 
-import com.omatheusmesmo.Lista.de.Compras.entity.User;
-import com.omatheusmesmo.Lista.de.Compras.service.UserService;
+import com.omatheusmesmo.shoppinglist.entity.User;
+import com.omatheusmesmo.shoppinglist.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;

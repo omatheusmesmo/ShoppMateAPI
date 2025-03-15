@@ -1,4 +1,4 @@
-package com.omatheusmesmo.Lista.de.Compras.dtos;
+package com.omatheusmesmo.shoppinglist.dtos;
 
 public class LoginRequest {
     private String email;

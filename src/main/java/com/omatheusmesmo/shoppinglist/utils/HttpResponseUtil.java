@@ -1,4 +1,4 @@
-package com.omatheusmesmo.Lista.de.Compras.utils;
+package com.omatheusmesmo.shoppinglist.utils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

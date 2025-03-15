@@ -1,7 +1,7 @@
-package com.omatheusmesmo.Lista.de.Compras.service;
+package com.omatheusmesmo.shoppinglist.service;
 
-import com.omatheusmesmo.Lista.de.Compras.entity.Item;
-import com.omatheusmesmo.Lista.de.Compras.repository.ItemRepository;
+import com.omatheusmesmo.shoppinglist.entity.Item;
+import com.omatheusmesmo.shoppinglist.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

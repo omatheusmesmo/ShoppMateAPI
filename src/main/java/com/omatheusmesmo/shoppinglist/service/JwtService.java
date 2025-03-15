@@ -1,4 +1,4 @@
-package com.omatheusmesmo.Lista.de.Compras.service;
+package com.omatheusmesmo.shoppinglist.service;
 
 import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JOSEException;

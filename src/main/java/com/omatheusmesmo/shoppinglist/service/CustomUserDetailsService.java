@@ -1,8 +1,8 @@
-package com.omatheusmesmo.Lista.de.Compras.service;
+package com.omatheusmesmo.shoppinglist.service;
 
 
-import com.omatheusmesmo.Lista.de.Compras.entity.User;
-import com.omatheusmesmo.Lista.de.Compras.repository.UserRepository;
+import com.omatheusmesmo.shoppinglist.entity.User;
+import com.omatheusmesmo.shoppinglist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,4 +1,4 @@
-package com.omatheusmesmo.Lista.de.Compras.configs.exceptions;
+package com.omatheusmesmo.shoppinglist.configs.exceptions;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;

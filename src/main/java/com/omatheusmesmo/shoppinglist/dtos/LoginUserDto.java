@@ -1,4 +1,4 @@
-package com.omatheusmesmo.Lista.de.Compras.dtos;
+package com.omatheusmesmo.shoppinglist.dtos;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,8 +1,8 @@
-package com.omatheusmesmo.Lista.de.Compras.controller;
+package com.omatheusmesmo.shoppinglist.controller;
 
-import com.omatheusmesmo.Lista.de.Compras.entity.Item;
-import com.omatheusmesmo.Lista.de.Compras.service.ItemService;
-import com.omatheusmesmo.Lista.de.Compras.utils.HttpResponseUtil;
+import com.omatheusmesmo.shoppinglist.entity.Item;
+import com.omatheusmesmo.shoppinglist.service.ItemService;
+import com.omatheusmesmo.shoppinglist.utils.HttpResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

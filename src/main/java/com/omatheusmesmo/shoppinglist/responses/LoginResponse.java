@@ -1,4 +1,4 @@
-package com.omatheusmesmo.Lista.de.Compras.responses;
+package com.omatheusmesmo.shoppinglist.responses;
 
 import lombok.Getter;
 import lombok.Setter;

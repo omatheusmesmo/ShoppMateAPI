@@ -1,6 +1,6 @@
-package com.omatheusmesmo.Lista.de.Compras.configs;
+package com.omatheusmesmo.shoppinglist.configs;
 
-import com.omatheusmesmo.Lista.de.Compras.service.CustomUserDetailsService;
+import com.omatheusmesmo.shoppinglist.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
