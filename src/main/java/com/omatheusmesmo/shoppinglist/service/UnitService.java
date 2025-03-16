@@ -4,6 +4,8 @@ import com.omatheusmesmo.shoppinglist.entity.Unit;
 import com.omatheusmesmo.shoppinglist.repository.UnitRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -11,9 +13,22 @@ public class UnitService {
 
     private UnitRepository unitRepository;
 
-    public void saveUnit(Unit unit){
+    public Unit saveUnit(Unit unit){
         isUnitValid(unit);
         unitRepository.save(unit);
+        return unit;
+    }
+
+    public void editUnit(Unit unit) {
+        isUnitValid(unit);
+        if (unitExists(unit)) {
+            throw new NoSuchElementException("Unit not found");
+        }
+        saveUnit(unit);
+    }
+
+    public List<Unit> findAll() {
+        return unitRepository.findAll();
     }
 
     public Optional<Unit> findUnitById(Long id){
@@ -31,6 +46,17 @@ public class UnitService {
     public void removeUnit(Unit unit){
         unit.setDeleted(true);
         saveUnit(unit);
+    }
+
+    public void removeUnitById(Long id) {
+        Optional<Unit> unit = findUnitById(id);
+        Unit deletedUnit = unit.get();
+        deletedUnit.setDeleted(true);
+        saveUnit(deletedUnit);
+    }
+
+    private boolean unitExists(Unit unit){
+        return unitRepository.existsById(unit.getId());
     }
 
     public void isUnitValid(Unit unit) {
@@ -53,6 +79,4 @@ public class UnitService {
             throw new IllegalArgumentException("Enter a valid unit symbol!");
         }
     }
-
-
 }
