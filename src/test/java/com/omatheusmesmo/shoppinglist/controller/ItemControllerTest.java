@@ -1,8 +1,8 @@
-package com.omatheusmesmo.Lista.de.Compras.controller;
+package com.omatheusmesmo.shoppinglist.controller;
 
-import com.omatheusmesmo.Lista.de.Compras.entity.Item;
-import com.omatheusmesmo.Lista.de.Compras.service.ItemService;
-import com.omatheusmesmo.Lista.de.Compras.service.JwtService;
+import com.omatheusmesmo.shoppinglist.entity.Item;
+import com.omatheusmesmo.shoppinglist.service.ItemService;
+import com.omatheusmesmo.shoppinglist.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +60,9 @@ class ItemControllerTest {
     @Test
     @WithMockUser
     void testPostAddItem() throws Exception {
-        Item newItem = new Item("Feijão", 1, "Alimentos");
+        Item newItem = new Item(1, "Feijão", "Alimentos");
 
-        when(itemService.addItem(any(Item.class))).thenReturn(newItem);
+        when(itemService.saveItem(any(Item.class))).thenReturn(newItem);
 
         mockMvc.perform(post("/item")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -105,7 +105,7 @@ class ItemControllerTest {
     @Test
     @WithMockUser
     void testPostAddItem_BadRequest() throws Exception {
-        when(itemService.addItem(any(Item.class))).thenThrow(new IllegalArgumentException());
+        when(itemService.saveItem(any(Item.class))).thenThrow(new IllegalArgumentException());
 
         mockMvc.perform(post("/item")
                         .contentType(MediaType.APPLICATION_JSON)

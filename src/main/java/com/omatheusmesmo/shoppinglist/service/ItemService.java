@@ -1,6 +1,5 @@
 package com.omatheusmesmo.shoppinglist.service;
 
-import com.omatheusmesmo.shoppinglist.entity.Category;
 import com.omatheusmesmo.shoppinglist.entity.Item;
 import com.omatheusmesmo.shoppinglist.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
