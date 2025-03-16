@@ -1,7 +1,7 @@
-package com.omatheusmesmo.Lista.de.Compras.service;
+package com.omatheusmesmo.shoppinglist.service;
 
-import com.omatheusmesmo.Lista.de.Compras.entity.Item;
-import com.omatheusmesmo.Lista.de.Compras.repository.ItemRepository;
+import com.omatheusmesmo.shoppinglist.entity.Item;
+import com.omatheusmesmo.shoppinglist.repository.ItemRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,12 +26,12 @@ public class ItemServiceTest {
     private ItemService itemService;
 
     @Test
-    public void testAddItem() {
+    public void testSaveItem() {
         Item mockItem = new Item("Feijão", 1, "Alimentos");
 
         when(itemRepository.save(any(Item.class))).thenReturn(mockItem);
 
-        Item item = itemService.addItem(mockItem);
+        Item item = itemService.saveItem(mockItem);
 
         assertNotNull(item);
         assertEquals("Feijão", item.getName());
@@ -40,7 +40,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testCheckNameAndQuantityValidItem() {
+    public void testIsItemValidValidItem() {
         Item validItem = new Item("Feijão", 1, "Alimentos");
         assertDoesNotThrow(() -> itemService.checkNameAndQuantity(validItem));
         verifyNoInteractions(itemRepository);
@@ -63,7 +63,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testCheckNameAndQuantityNullQuantity() {
+    public void testIsItemValid() {
         Item nullQuantityItem = new Item("Feijão", null, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> itemService.checkNameAndQuantity(nullQuantityItem));
@@ -71,7 +71,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testCheckNameAndQuantityLessThanOneQuantity() {
+    public void testIsItemValid() {
         Item lessThanOneQuantityItem = new Item("Feijão", 0, "Alimentos");
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> itemService.checkNameAndQuantity(lessThanOneQuantityItem));

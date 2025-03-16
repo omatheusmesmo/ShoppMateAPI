@@ -33,7 +33,7 @@ public class ItemController {
     @PostMapping
     public ResponseEntity<Item> addItem(@RequestBody Item item) {
         try {
-            Item addedItem = itemService.addItem(item);
+            Item addedItem = itemService.saveItem(item);
             return HttpResponseUtil.created(addedItem);
         } catch (IllegalArgumentException e) {
             return HttpResponseUtil.badRequest(item);
