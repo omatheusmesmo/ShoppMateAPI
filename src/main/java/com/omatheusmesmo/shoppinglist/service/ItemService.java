@@ -1,5 +1,6 @@
 package com.omatheusmesmo.shoppinglist.service;
 
+import com.omatheusmesmo.shoppinglist.entity.Category;
 import com.omatheusmesmo.shoppinglist.entity.Item;
 import com.omatheusmesmo.shoppinglist.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +16,26 @@ public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
 
-    public Item addItem(Item item) {
-        checkNameAndQuantity(item);
+    private UnitService unitService;
+    private CategoryService categoryService;
+
+    public Item saveItem(Item item) {
+        isItemValid(item);
         itemRepository.save(item);
         return item;
     }
 
-    public void checkNameAndQuantity(Item item) {
-        if (item.getName() == null) {
-            throw new IllegalArgumentException("The item name cannot be null!");
-        } else if (item.getName().isBlank()) {
-            throw new IllegalArgumentException("Enter a valid item name!");
-        }
+    public void isItemValid(Item item) {
+        categoryService.isCategoryValid(item.getCategory());
+        unitService.isUnitValid(item.getUnit());
+        checkName(item.getName());
+    }
 
-        if (item.getQuantity() == null) {
-            throw new IllegalArgumentException("The item quantity cannot be null!");
-        } else if (item.getQuantity() < 1) {
-            throw new IllegalArgumentException("Quantity must be greater than 0!");
+    private void checkName(String name){
+        if (name == null) {
+            throw new IllegalArgumentException("The item name cannot be null!");
+        } else if (name.isBlank()) {
+            throw new IllegalArgumentException("Enter a valid item name!");
         }
     }
 
@@ -60,7 +64,7 @@ public class ItemService {
 
     public Item editItem(Item item) {
         findItemById(item.getId());
-        checkNameAndQuantity(item);
+        isItemValid(item);
         itemRepository.save(item);
         return item;
     }
