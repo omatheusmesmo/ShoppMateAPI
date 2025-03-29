@@ -1,5 +1,6 @@
 package com.omatheusmesmo.shoppmate.entity;
 
+import com.omatheusmesmo.shoppmate.shared.domain.BaseAuditableEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,17 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "users")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user", columnDefinition = "serial")
-    private Long id;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+public class User extends BaseAuditableEntity {
 
     private String email;
 
@@ -33,7 +24,5 @@ public class User {
 
     private String password;
     private String role = "USER";
-
-    private Boolean deleted;
 
 }
