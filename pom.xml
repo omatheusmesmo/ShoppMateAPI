@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.omatheusmesmo</groupId>
-	<artifactId>Lista-de-Compras</artifactId>
+	<artifactId>Shopp Mate</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Lista-de-Compras</name>
+	<name>Shop Mate</name>
 	<description>API de lista de compras para prática</description>
 	<url/>
 	<licenses>
