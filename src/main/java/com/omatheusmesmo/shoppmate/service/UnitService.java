@@ -2,6 +2,8 @@ package com.omatheusmesmo.shoppmate.service;
 
 import com.omatheusmesmo.shoppmate.entity.Unit;
 import com.omatheusmesmo.shoppmate.repository.UnitRepository;
+import com.omatheusmesmo.shoppmate.shared.service.AuditService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,11 +12,14 @@ import java.util.Optional;
 
 @Service
 public class UnitService {
-
+    @Autowired
     private UnitRepository unitRepository;
+    @Autowired
+    private AuditService auditService;
 
     public Unit saveUnit(Unit unit){
         isUnitValid(unit);
+        auditService.setAuditData(unit, true);
         unitRepository.save(unit);
         return unit;
     }
@@ -24,6 +29,7 @@ public class UnitService {
         if (unitExists(unit)) {
             throw new NoSuchElementException("Unit not found");
         }
+        auditService.setAuditData(unit, false);
         saveUnit(unit);
     }
 
@@ -44,14 +50,14 @@ public class UnitService {
     }
 
     public void removeUnit(Unit unit){
-        unit.setDeleted(true);
+        auditService.softDelete(unit);
         saveUnit(unit);
     }
 
     public void removeUnitById(Long id) {
         Optional<Unit> unit = findUnitById(id);
         Unit deletedUnit = unit.get();
-        deletedUnit.setDeleted(true);
+        auditService.softDelete(deletedUnit);
         saveUnit(deletedUnit);
     }
 
@@ -60,16 +66,8 @@ public class UnitService {
     }
 
     public void isUnitValid(Unit unit) {
-        checkName(unit.getName());
+        unit.checkName();
         checkSymbol(unit.getSymbol());
-    }
-
-    private void checkName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("The unit name cannot be null!");
-        } else if (name.isBlank()) {
-            throw new IllegalArgumentException("Enter a valid unit name!");
-        }
     }
 
     private void checkSymbol(String symbol) {

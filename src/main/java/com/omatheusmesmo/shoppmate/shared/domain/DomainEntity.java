@@ -26,7 +26,7 @@ public abstract class DomainEntity implements AuditableEntity {
 
     private Boolean deleted = false;
 
-    protected void checkName() {
+    public void checkName() {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null!");
         } else if (name.isBlank()) {

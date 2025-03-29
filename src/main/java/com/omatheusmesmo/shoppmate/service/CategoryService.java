@@ -2,6 +2,8 @@ package com.omatheusmesmo.shoppmate.service;
 
 import com.omatheusmesmo.shoppmate.entity.Category;
 import com.omatheusmesmo.shoppmate.repository.CategoryRepository;
+import com.omatheusmesmo.shoppmate.shared.service.AuditService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,7 +12,10 @@ import java.util.Optional;
 @Service
 public class CategoryService {
 
+    @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private AuditService auditService;
 
     public void saveCategory(Category category){
         isCategoryValid(category);
@@ -24,22 +29,14 @@ public class CategoryService {
     public Optional<Category> findCategoryByName(String name){
         return categoryRepository.findByName(name);
     }
-
+    //TODO improve it
     public void removeCategory(Category category){
-        category.setDeleted(true);
+        auditService.softDelete(category);
         saveCategory(category);
     }
 
     public void isCategoryValid(Category category) {
-        checkName(category.getName());
-    }
-
-    private void checkName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("The unit name cannot be null!");
-        } else if (name.isBlank()) {
-            throw new IllegalArgumentException("Enter a valid unit name!");
-        }
+        category.checkName();
     }
 
     public List<Category> findAll() {

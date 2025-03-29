@@ -2,6 +2,7 @@ package com.omatheusmesmo.shoppmate.service;
 
 import com.omatheusmesmo.shoppmate.entity.Item;
 import com.omatheusmesmo.shoppmate.repository.ItemRepository;
+import com.omatheusmesmo.shoppmate.shared.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,15 @@ public class ItemService {
 
     @Autowired
     private ItemRepository itemRepository;
+    @Autowired
+    private AuditService auditService;
 
     private UnitService unitService;
     private CategoryService categoryService;
 
-    public Item saveItem(Item item) {
+    public Item addItem(Item item) {
         isItemValid(item);
+        auditService.setAuditData(item,true);
         itemRepository.save(item);
         return item;
     }
@@ -27,15 +31,7 @@ public class ItemService {
     public void isItemValid(Item item) {
         categoryService.isCategoryValid(item.getCategory());
         unitService.isUnitValid(item.getUnit());
-        checkName(item.getName());
-    }
-
-    private void checkName(String name){
-        if (name == null) {
-            throw new IllegalArgumentException("The item name cannot be null!");
-        } else if (name.isBlank()) {
-            throw new IllegalArgumentException("Enter a valid item name!");
-        }
+        item.checkName();
     }
 
     public Optional<Item> findItem(Item item) {
@@ -55,15 +51,17 @@ public class ItemService {
             throw new NoSuchElementException("Item not found");
         }
     }
-
+    //TODO remove item by item
     public void removeItem(Long id) {
         findItemById(id);
+        //auditService.softDelete(item);
         itemRepository.deleteById(id);
     }
 
     public Item editItem(Item item) {
         findItemById(item.getId());
         isItemValid(item);
+        auditService.setAuditData(item, false);
         itemRepository.save(item);
         return item;
     }
