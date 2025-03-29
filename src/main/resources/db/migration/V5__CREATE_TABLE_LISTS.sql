@@ -1,5 +1,5 @@
 CREATE TABLE lists (
-    id_list SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     owner_id_user INTEGER NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,

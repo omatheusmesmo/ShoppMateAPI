@@ -1,4 +1,5 @@
 CREATE TABLE list_items (
+    id SERIAL PRIMARY KEY,
     id_list INTEGER NOT NULL,
     id_item INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
@@ -6,7 +7,7 @@ CREATE TABLE list_items (
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY (id_list, id_item),
+    UNIQUE (id_list, id_item),
     FOREIGN KEY (id_list) REFERENCES lists(id_list),
     FOREIGN KEY (id_item) REFERENCES items(id_item)
 );

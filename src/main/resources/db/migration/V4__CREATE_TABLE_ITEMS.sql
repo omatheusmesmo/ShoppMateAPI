@@ -1,5 +1,5 @@
 CREATE TABLE items (
-    id_item SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     id_category INTEGER,
     id_unit INTEGER,
     name VARCHAR(100) NOT NULL,
