@@ -40,7 +40,6 @@ class Item {
     LocalDateTime createdAt
     LocalDateTime updatedAt
     Boolean deleted
-    List<ListItem> listItems
 }
 
 class Category {
@@ -49,7 +48,6 @@ class Category {
     LocalDateTime createdAt
     LocalDateTime updatedAt
     Boolean deleted
-    List<Item> itemDefinitions
 }
 
 class Unit {
@@ -59,7 +57,6 @@ class Unit {
     LocalDateTime createdAt
     LocalDateTime updatedAt
     Boolean deleted
-    List<Item> items
 }
 
 class ListUserPermission {

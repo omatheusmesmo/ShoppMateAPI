@@ -19,8 +19,7 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     public User addUser(User user){
-        validateIfDataIsNullOrEmpty(user);
-        validateIfUserExists(user.getEmail());
+        isUserValid(user);
         encryptPassword(user);
         userRepository.save(user);
         return user;
@@ -47,6 +46,11 @@ public class UserService {
         if(userRepository.findById(id).isEmpty()){
             throw new NoSuchElementException("User not found!");
         }
+    }
+
+    public void isUserValid(User user){
+        validateIfDataIsNullOrEmpty(user);
+        validateIfUserExists(user.getEmail());
     }
 
     protected void validateIfUserExists(String email) {
