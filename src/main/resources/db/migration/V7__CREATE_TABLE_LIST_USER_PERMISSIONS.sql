@@ -1,9 +1,12 @@
 CREATE TABLE list_user_permissions (
+    id SERIAL PRIMARY KEY,
     id_list INTEGER NOT NULL,
     id_user INTEGER NOT NULL,
     permission_type VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY (id_list, id_user),
+    UNIQUE (id_list, id_user),
     FOREIGN KEY (id_list) REFERENCES lists(id_list),
     FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
