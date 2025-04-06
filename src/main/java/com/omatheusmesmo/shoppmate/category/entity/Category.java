@@ -1,11 +1,9 @@
-package com.omatheusmesmo.shoppmate.entity;
+package com.omatheusmesmo.shoppmate.category.entity;
 
 import com.omatheusmesmo.shoppmate.shared.domain.DomainEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name="categories")

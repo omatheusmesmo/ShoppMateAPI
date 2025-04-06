@@ -1,6 +1,6 @@
-package com.omatheusmesmo.shoppmate.repository;
+package com.omatheusmesmo.shoppmate.category.repository;
 
-import com.omatheusmesmo.shoppmate.entity.Category;
+import com.omatheusmesmo.shoppmate.category.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
