@@ -1,4 +1,4 @@
-package com.omatheusmesmo.shoppmate.configs.exceptions;
+package com.omatheusmesmo.shoppmate.auth.configs.exceptions;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;

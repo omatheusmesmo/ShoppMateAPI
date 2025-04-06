@@ -1,6 +1,6 @@
-package com.omatheusmesmo.shoppmate.configs;
+package com.omatheusmesmo.shoppmate.auth.configs;
 
-import com.omatheusmesmo.shoppmate.service.JwtService;
+import com.omatheusmesmo.shoppmate.auth.service.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

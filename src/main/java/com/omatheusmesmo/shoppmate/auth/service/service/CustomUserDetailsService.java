@@ -1,8 +1,8 @@
-package com.omatheusmesmo.shoppmate.service;
+package com.omatheusmesmo.shoppmate.auth.service.service;
 
 
-import com.omatheusmesmo.shoppmate.entity.User;
-import com.omatheusmesmo.shoppmate.repository.UserRepository;
+import com.omatheusmesmo.shoppmate.user.entity.User;
+import com.omatheusmesmo.shoppmate.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

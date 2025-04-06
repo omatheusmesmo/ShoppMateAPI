@@ -1,6 +1,6 @@
-package com.omatheusmesmo.shoppmate.configs;
+package com.omatheusmesmo.shoppmate.auth.configs;
 
-import com.omatheusmesmo.shoppmate.service.CustomUserDetailsService;
+import com.omatheusmesmo.shoppmate.auth.service.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
