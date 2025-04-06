@@ -1,8 +1,12 @@
 package com.omatheusmesmo.shoppmate.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omatheusmesmo.shoppmate.category.entity.Category;
 import com.omatheusmesmo.shoppmate.entity.Item;
+import com.omatheusmesmo.shoppmate.entity.Unit;
 import com.omatheusmesmo.shoppmate.service.ItemService;
 import com.omatheusmesmo.shoppmate.service.JwtService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,37 +44,65 @@ class ItemControllerTest {
     @MockBean
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private Item item1;
+    private Item item2;
+    private Category category;
+    private Unit unit;
+
+    @BeforeEach
+    void setUp() {
+        unit = new Unit();
+        unit.setId(1L);
+        unit.setName("kg");
+
+        category = new Category();
+        category.setId(1L);
+        category.setName("Food");
+
+        item1 = new Item();
+        item1.setId(1L);
+        item1.setName("Feijão");
+        item1.setUnit(unit);
+        item1.setCategory(category);
+
+        item2 = new Item();
+        item2.setId(2L);
+        item2.setName("Arroz");
+        item2.setUnit(unit);
+        item2.setCategory(category);
+    }
+
     @Test
     @WithMockUser
     void testGetAllItems() throws Exception {
-        Item item1 = new Item("Feijão", 1, "Alimentos");
-        Item item2 = new Item("Arroz", 2, "Alimentos");
         List<Item> allItems = Arrays.asList(item1, item2);
 
         when(itemService.findAll()).thenReturn(allItems);
 
         mockMvc.perform(get("/item"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[" +
-                        "{'name':'Feijão','quantity':1,'category':'Alimentos'}," +
-                        "{'name':'Arroz','quantity':2,'category':'Alimentos'}" +
-                        "]"));
+                .andExpect(content().json(objectMapper.writeValueAsString(allItems)));
     }
 
     @Test
     @WithMockUser
     void testPostAddItem() throws Exception {
-        Item newItem = new Item(1, "Feijão", "Alimentos");
+        Item newItem = new Item();
+        newItem.setId(1L);
+        newItem.setName("Feijão");
+        newItem.setUnit(unit);
+        newItem.setCategory(category);
 
-        when(itemService.saveItem(any(Item.class))).thenReturn(newItem);
+        when(itemService.addItem(any(Item.class))).thenReturn(newItem);
 
         mockMvc.perform(post("/item")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Feijão\",\"quantity\":1,\"category\":\"Alimentos\"}"))
+                        .content(objectMapper.writeValueAsString(newItem)))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(
-                        "{'name':'Feijão','quantity':1,'category':'Alimentos'}"
-                ));
+                .andExpect(content().json(objectMapper.writeValueAsString(newItem)));
     }
 
     @Test
@@ -89,27 +121,34 @@ class ItemControllerTest {
     @Test
     @WithMockUser
     void testPutEditItem() throws Exception {
-        Item editedItem = new Item("Feijão", 1, "Alimentos");
+        Item editedItem = new Item();
+        editedItem.setId(1L);
+        editedItem.setName("Feijão");
+        editedItem.setUnit(unit);
+        editedItem.setCategory(category);
 
         when(itemService.editItem(any(Item.class))).thenReturn(editedItem);
 
         mockMvc.perform(put("/item")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Feijão\",\"quantity\":1,\"category\":\"Alimentos\"}"))
+                        .content(objectMapper.writeValueAsString(editedItem)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(
-                        "{'name':'Feijão','quantity':1,'category':'Alimentos'}"
-                ));
+                .andExpect(content().json(objectMapper.writeValueAsString(editedItem)));
     }
 
     @Test
     @WithMockUser
     void testPostAddItem_BadRequest() throws Exception {
-        when(itemService.saveItem(any(Item.class))).thenThrow(new IllegalArgumentException());
+        when(itemService.addItem(any(Item.class))).thenThrow(new IllegalArgumentException());
+
+        Item invalidItem = new Item();
+        invalidItem.setName("");
+        invalidItem.setUnit(unit);
+        invalidItem.setCategory(category);
 
         mockMvc.perform(post("/item")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"\",\"quantity\":0,\"category\":\"\"}"))
+                        .content(objectMapper.writeValueAsString(invalidItem)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -118,9 +157,14 @@ class ItemControllerTest {
     void testPutEditItem_NotFound() throws Exception {
         doThrow(new NoSuchElementException()).when(itemService).editItem(any(Item.class));
 
+        Item item = new Item();
+        item.setName("Feijão");
+        item.setUnit(unit);
+        item.setCategory(category);
+
         mockMvc.perform(put("/item")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Feijão\",\"quantity\":1,\"category\":\"Alimentos\"}"))
+                        .content(objectMapper.writeValueAsString(item)))
                 .andExpect(status().isNotFound());
     }
 }
