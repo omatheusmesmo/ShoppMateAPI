@@ -98,7 +98,7 @@ public class JwtService {
                 .build();
     }
 
-    protected KeyPair generateRSAKeys() {
+    public KeyPair generateRSAKeys() {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);

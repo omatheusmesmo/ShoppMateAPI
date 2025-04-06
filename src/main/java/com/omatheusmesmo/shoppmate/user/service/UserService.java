@@ -42,7 +42,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    protected void findUserById(Long id) {
+    public void findUserById(Long id) {
         if(userRepository.findById(id).isEmpty()){
             throw new NoSuchElementException("User not found!");
         }
@@ -53,13 +53,13 @@ public class UserService {
         validateIfUserExists(user.getEmail());
     }
 
-    protected void validateIfUserExists(String email) {
+    public void validateIfUserExists(String email) {
         if(userRepository.findByEmail(email).isPresent()){
             throw new IllegalArgumentException("E-mail is already being used!");
         }
     }
 
-    protected void validateIfDataIsNullOrEmpty(User user) {
+    public void validateIfDataIsNullOrEmpty(User user) {
         if(user.getEmail() == null || user.getEmail().isBlank()){
             throw new IllegalArgumentException("E-mail is required!");
         }
