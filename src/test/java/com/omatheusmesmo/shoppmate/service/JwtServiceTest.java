@@ -1,7 +1,8 @@
-package com.omatheusmesmo.Lista.de.Compras.service;
+package com.omatheusmesmo.shoppmate.service;
 
 import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.omatheusmesmo.shoppmate.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

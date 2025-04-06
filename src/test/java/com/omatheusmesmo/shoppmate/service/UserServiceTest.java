@@ -1,7 +1,7 @@
-package com.omatheusmesmo.Lista.de.Compras.service;
+package com.omatheusmesmo.shoppmate.service;
 
-import com.omatheusmesmo.Lista.de.Compras.entity.User;
-import com.omatheusmesmo.Lista.de.Compras.repository.UserRepository;
+import com.omatheusmesmo.shoppmate.entity.User;
+import com.omatheusmesmo.shoppmate.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,8 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userMock = new User(1L,"John Doe","John@Doe.com", "1234","USER");
+        userMock = new User("John Doe","John@Doe.com", "1234","USER");
+        userMock.setId(1L);
     }
 
     @AfterEach

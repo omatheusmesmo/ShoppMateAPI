@@ -1,156 +1,216 @@
 package com.omatheusmesmo.shoppmate.service;
 
+import com.omatheusmesmo.shoppmate.category.entity.Category;
 import com.omatheusmesmo.shoppmate.entity.Item;
+import com.omatheusmesmo.shoppmate.entity.Unit;
 import com.omatheusmesmo.shoppmate.repository.ItemRepository;
-import org.junit.jupiter.api.extension.ExtendWith;
+import com.omatheusmesmo.shoppmate.shared.service.AuditService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class ItemServiceTest {
+class ItemServiceTest {
 
     @Mock
     private ItemRepository itemRepository;
 
+    @Mock
+    private AuditService auditService;
+
+    @Mock
+    private UnitService unitService;
+
+    @Mock
+    private CategoryService categoryService;
+
     @InjectMocks
     private ItemService itemService;
 
-    @Test
-    public void testSaveItem() {
-       Item mockItem = new Item();
-
-        when(itemRepository.save(any(Item.class))).thenReturn(mockItem);
-
-        Item item = itemService.saveItem(mockItem);
-
-        assertNotNull(item);
-        assertEquals("Feijão", item.getName());
-
-        verify(itemRepository, times(1)).save(mockItem);
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testIsItemValidValidItem() {
-        Item validItem = new Item();
-        assertDoesNotThrow(() -> itemService.checkName(validItem));
-        verifyNoInteractions(itemRepository);
-    }
+    void addItem_ValidItem_ReturnsSavedItem() {
+        // Arrange
+        Item item = createSampleItem();
+        when(itemRepository.save(item)).thenReturn(item);
 
-    @Test
-    public void testCheckNameAndQuantityItemNameNull() {
-        Item itemNameNull = new Item();
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> itemService.checkNameAndQuantity(itemNameNull));
-        assertEquals("The item name cannot be null!", exception.getMessage());
-    }
+        // Act
+        Item result = itemService.addItem(item);
 
-    @Test
-    public void testCheckNameAndQuantityItemNameBlank() {
-        Item itemNameBlank = new Item();
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> itemService.checkNameAndQuantity(itemNameBlank));
-        assertEquals("Enter a valid item name!", exception.getMessage());
-    }
-
-    @Test
-    public void testIsItemValid() {
-        Item nullQuantityItem = new Item();
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> itemService.checkNameAndQuantity(nullQuantityItem));
-        assertEquals("The item quantity cannot be null!", exception.getMessage());
-    }
-
-    @Test
-    public void testIsItemValid() {
-        Item lessThanOneQuantityItem = new Item();
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> itemService.checkNameAndQuantity(lessThanOneQuantityItem));
-        assertEquals("Quantity must be greater than 0!", exception.getMessage());
-    }
-
-    @Test
-    public void testFindItemPresent() {
-        Item presentItem = new Item();
-        presentItem.setId(1L);
-
-        when(itemRepository.findById(presentItem.getId())).thenReturn(Optional.of(presentItem));
-
-        Optional<Item> result = itemService.findItem(presentItem);
-
+        // Assert
         assertNotNull(result);
-        verify(itemRepository, times(1)).findById(presentItem.getId());
+        assertEquals(item, result);
+        verify(categoryService, times(1)).isCategoryValid(item.getCategory());
+        verify(unitService, times(1)).isUnitValid(item.getUnit());
+        verify(auditService, times(1)).setAuditData(item, true);
+        verify(itemRepository, times(1)).save(item);
     }
 
     @Test
-    public void testFindItemNotPresent() {
-        Item notPresentItem = new Item();
-        notPresentItem.setId(99L);
+    void isItemValid_ValidItem_NoExceptionThrown() {
+        // Arrange
+        Item item = createSampleItem();
 
-        when(itemRepository.findById(notPresentItem.getId())).thenReturn(Optional.empty());
-
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
-                () -> itemService.findItem(notPresentItem));
-        assertEquals("Item not found", exception.getMessage());
+        // Act & Assert
+        assertDoesNotThrow(() -> itemService.isItemValid(item));
+        verify(categoryService, times(1)).isCategoryValid(item.getCategory());
+        verify(unitService, times(1)).isUnitValid(item.getUnit());
     }
 
     @Test
-    public void testFindAll() {
-        List<Item> allItems = List.of(
-                new Item(),
-                new Item()
-        );
+    void findItem_ExistingItem_ReturnsItem() {
+        // Arrange
+        Item item = createSampleItem();
+        when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
 
-        when(itemRepository.findAll()).thenReturn(allItems);
+        // Act
+        Optional<Item> result = itemService.findItem(item);
 
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(item, result.get());
+        verify(itemRepository, times(1)).findById(item.getId());
+    }
+
+    @Test
+    void findItem_NonExistingItem_ThrowsNoSuchElementException() {
+        // Arrange
+        Item item = createSampleItem();
+        when(itemRepository.findById(item.getId())).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(NoSuchElementException.class, () -> itemService.findItem(item));
+        verify(itemRepository, times(1)).findById(item.getId());
+    }
+
+    @Test
+    void findItemById_ExistingId_ReturnsItem() {
+        // Arrange
+        Long id = 1L;
+        Item item = createSampleItem();
+        item.setId(id);
+        when(itemRepository.findById(id)).thenReturn(Optional.of(item));
+
+        // Act
+        Optional<Item> result = itemService.findItemById(id);
+
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(item, result.get());
+        verify(itemRepository, times(1)).findById(id);
+    }
+
+    @Test
+    void findItemById_NonExistingId_ThrowsNoSuchElementException() {
+        // Arrange
+        Long id = 1L;
+        when(itemRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(NoSuchElementException.class, () -> itemService.findItemById(id));
+        verify(itemRepository, times(1)).findById(id);
+    }
+
+    @Test
+    void removeItem_ExistingId_DeletesItem() {
+        // Arrange
+        Long id = 1L;
+        Item item = createSampleItem();
+        item.setId(id);
+        when(itemRepository.findById(id)).thenReturn(Optional.of(item));
+
+        // Act
+        itemService.removeItem(id);
+
+        // Assert
+        verify(itemRepository, times(1)).findById(id);
+        verify(itemRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void removeItem_NonExistingId_ThrowsNoSuchElementException() {
+        // Arrange
+        Long id = 1L;
+        when(itemRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(NoSuchElementException.class, () -> itemService.removeItem(id));
+        verify(itemRepository, times(1)).findById(id);
+        verify(itemRepository, never()).deleteById(any());
+    }
+
+    @Test
+    void editItem_ExistingItem_ReturnsEditedItem() {
+        // Arrange
+        Item item = createSampleItem();
+        when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
+        when(itemRepository.save(item)).thenReturn(item);
+
+        // Act
+        Item result = itemService.editItem(item);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(item, result);
+        verify(itemRepository, times(1)).findById(item.getId());
+        verify(categoryService, times(1)).isCategoryValid(item.getCategory());
+        verify(unitService, times(1)).isUnitValid(item.getUnit());
+        verify(auditService, times(1)).setAuditData(item, false);
+        verify(itemRepository, times(1)).save(item);
+    }
+
+    @Test
+    void editItem_NonExistingItem_ThrowsNoSuchElementException() {
+        // Arrange
+        Item item = createSampleItem();
+        when(itemRepository.findById(item.getId())).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(NoSuchElementException.class, () -> itemService.editItem(item));
+        verify(itemRepository, times(1)).findById(item.getId());
+        verify(itemRepository, never()).save(any());
+    }
+
+    @Test
+    void findAll_MultipleItems_ReturnsAllItems() {
+        // Arrange
+        Item item1 = createSampleItem();
+        Item item2 = createSampleItem();
+        List<Item> items = Arrays.asList(item1, item2);
+        when(itemRepository.findAll()).thenReturn(items);
+
+        // Act
         List<Item> result = itemService.findAll();
 
-        assertNotNull(result);
+        // Assert
         assertEquals(2, result.size());
-        assertEquals("Feijão", result.get(0).getName());
-        assertEquals("Arroz", result.get(1).getName());
-
+        assertTrue(result.contains(item1));
+        assertTrue(result.contains(item2));
         verify(itemRepository, times(1)).findAll();
     }
 
-    @Test
-    public void testEditItem() {
-        Item editedItem = new Item();
-        editedItem.setId(1L);
-
-        when(itemRepository.findById(editedItem.getId())).thenReturn(Optional.of(editedItem));
-        when(itemRepository.save(editedItem)).thenReturn(editedItem);
-
-        Item result = itemService.editItem(editedItem);
-
-        assertNotNull(result);
-        assertEquals("Feijão", result.getName());
-        assertEquals(2, result.);
-        assertEquals("Alimentos", result.getCategory());
-
-        verify(itemRepository, times(1)).save(editedItem);
-    }
-
-    @Test
-    public void testRemoveItem() {
-        Long id = 1L;
-
+    private Item createSampleItem() {
         Item item = new Item();
-        item.setId(id);
-
-        when(itemRepository.findById(id)).thenReturn(Optional.of(item));
-
-        assertDoesNotThrow(() -> itemService.removeItem(id));
-
-        verify(itemRepository, times(1)).deleteById(id);
+        item.setId(1L);
+        item.setName("Sample Item");
+        item.setCategory(new Category());
+        item.setUnit(new Unit());
+        item.setCreatedAt(LocalDateTime.now());
+        item.setUpdatedAt(LocalDateTime.now());
+        return item;
     }
 }
