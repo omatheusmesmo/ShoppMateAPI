@@ -2,10 +2,11 @@ package com.omatheusmesmo.shoppmate.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omatheusmesmo.shoppmate.category.entity.Category;
-import com.omatheusmesmo.shoppmate.entity.Item;
-import com.omatheusmesmo.shoppmate.entity.Unit;
-import com.omatheusmesmo.shoppmate.service.ItemService;
-import com.omatheusmesmo.shoppmate.service.JwtService;
+import com.omatheusmesmo.shoppmate.item.controller.ItemController;
+import com.omatheusmesmo.shoppmate.item.entity.Item;
+import com.omatheusmesmo.shoppmate.unit.entity.Unit;
+import com.omatheusmesmo.shoppmate.item.service.ItemService;
+import com.omatheusmesmo.shoppmate.auth.service.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

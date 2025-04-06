@@ -1,10 +1,13 @@
 package com.omatheusmesmo.shoppmate.service;
 
 import com.omatheusmesmo.shoppmate.category.entity.Category;
-import com.omatheusmesmo.shoppmate.entity.Item;
-import com.omatheusmesmo.shoppmate.entity.Unit;
-import com.omatheusmesmo.shoppmate.repository.ItemRepository;
+import com.omatheusmesmo.shoppmate.category.service.CategoryService;
+import com.omatheusmesmo.shoppmate.item.entity.Item;
+import com.omatheusmesmo.shoppmate.item.service.ItemService;
+import com.omatheusmesmo.shoppmate.unit.entity.Unit;
+import com.omatheusmesmo.shoppmate.item.repository.ItemRepository;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
+import com.omatheusmesmo.shoppmate.unit.service.UnitService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

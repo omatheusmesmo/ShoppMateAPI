@@ -1,8 +1,10 @@
-package com.omatheusmesmo.shoppmate.service;
+package com.omatheusmesmo.shoppmate.item.service;
 
-import com.omatheusmesmo.shoppmate.entity.Item;
-import com.omatheusmesmo.shoppmate.repository.ItemRepository;
+import com.omatheusmesmo.shoppmate.category.service.CategoryService;
+import com.omatheusmesmo.shoppmate.item.entity.Item;
+import com.omatheusmesmo.shoppmate.item.repository.ItemRepository;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
+import com.omatheusmesmo.shoppmate.unit.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,9 @@ public class ItemService {
     private ItemRepository itemRepository;
     @Autowired
     private AuditService auditService;
-
+    @Autowired
     private UnitService unitService;
+    @Autowired
     private CategoryService categoryService;
 
     public Item addItem(Item item) {
