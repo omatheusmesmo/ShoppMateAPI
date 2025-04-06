@@ -1,7 +1,6 @@
 package com.omatheusmesmo.shoppmate.list.entity;
 
-import com.omatheusmesmo.shoppmate.entity.Item;
-import com.omatheusmesmo.shoppmate.entity.User;
+import com.omatheusmesmo.shoppmate.user.entity.User;
 import com.omatheusmesmo.shoppmate.shared.domain.BaseAuditableEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

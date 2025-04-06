@@ -2,7 +2,7 @@ package com.omatheusmesmo.shoppmate.list.service;
 
 import com.omatheusmesmo.shoppmate.list.entity.ShoppListUserPermission;
 import com.omatheusmesmo.shoppmate.list.repository.ShoppListUserPermissionRepository;
-import com.omatheusmesmo.shoppmate.service.UserService;
+import com.omatheusmesmo.shoppmate.user.service.UserService;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
