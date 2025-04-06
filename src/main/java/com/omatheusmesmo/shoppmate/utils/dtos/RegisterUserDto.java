@@ -1,4 +1,4 @@
-package com.omatheusmesmo.shoppmate.dtos;
+package com.omatheusmesmo.shoppmate.utils.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

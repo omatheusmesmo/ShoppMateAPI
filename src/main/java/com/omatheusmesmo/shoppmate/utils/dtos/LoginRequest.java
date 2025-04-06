@@ -1,4 +1,4 @@
-package com.omatheusmesmo.shoppmate.dtos;
+package com.omatheusmesmo.shoppmate.utils.dtos;
 
 public class LoginRequest {
     private String email;
