@@ -1,4 +1,4 @@
-package com.omatheusmesmo.shoppmate.entity;
+package com.omatheusmesmo.shoppmate.user.entity;
 
 import com.omatheusmesmo.shoppmate.shared.domain.BaseAuditableEntity;
 import jakarta.persistence.*;
@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor

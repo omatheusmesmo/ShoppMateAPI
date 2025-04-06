@@ -1,7 +1,8 @@
 package com.omatheusmesmo.shoppmate.service;
 
-import com.omatheusmesmo.shoppmate.entity.User;
-import com.omatheusmesmo.shoppmate.repository.UserRepository;
+import com.omatheusmesmo.shoppmate.user.entity.User;
+import com.omatheusmesmo.shoppmate.user.repository.UserRepository;
+import com.omatheusmesmo.shoppmate.user.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

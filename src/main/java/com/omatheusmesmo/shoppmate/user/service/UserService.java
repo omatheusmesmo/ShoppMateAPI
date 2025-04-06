@@ -1,8 +1,8 @@
-package com.omatheusmesmo.shoppmate.service;
+package com.omatheusmesmo.shoppmate.user.service;
 
 
-import com.omatheusmesmo.shoppmate.entity.User;
-import com.omatheusmesmo.shoppmate.repository.UserRepository;
+import com.omatheusmesmo.shoppmate.user.entity.User;
+import com.omatheusmesmo.shoppmate.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
