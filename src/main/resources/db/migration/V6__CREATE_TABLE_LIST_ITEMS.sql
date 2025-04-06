@@ -8,8 +8,8 @@ CREATE TABLE list_items (
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE,
     UNIQUE (id_list, id_item),
-    FOREIGN KEY (id_list) REFERENCES lists(id_list),
-    FOREIGN KEY (id_item) REFERENCES items(id_item)
+    FOREIGN KEY (id_list) REFERENCES lists(id),
+    FOREIGN KEY (id_item) REFERENCES items(id)
 );
 
 CREATE INDEX idx_list_items_id_list ON list_items (id_list);

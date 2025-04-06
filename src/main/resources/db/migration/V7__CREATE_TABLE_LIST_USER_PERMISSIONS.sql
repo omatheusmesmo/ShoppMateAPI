@@ -7,8 +7,8 @@ CREATE TABLE list_user_permissions (
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE,
     UNIQUE (id_list, id_user),
-    FOREIGN KEY (id_list) REFERENCES lists(id_list),
-    FOREIGN KEY (id_user) REFERENCES users(id_user)
+    FOREIGN KEY (id_list) REFERENCES lists(id),
+    FOREIGN KEY (id_user) REFERENCES users(id)
 );
 
 CREATE INDEX idx_list_user_permissions_id_list ON list_user_permissions (id_list);

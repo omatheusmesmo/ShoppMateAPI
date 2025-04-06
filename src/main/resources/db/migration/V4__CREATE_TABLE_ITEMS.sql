@@ -7,8 +7,8 @@ CREATE TABLE items (
     updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT FALSE,
     UNIQUE (name),
-    FOREIGN KEY (id_category) REFERENCES categories(id_category),
-    FOREIGN KEY (id_unit) REFERENCES units(id_unit)
+    FOREIGN KEY (id_category) REFERENCES categories(id),
+    FOREIGN KEY (id_unit) REFERENCES units(id)
 );
 
 CREATE INDEX idx_items_id_category ON items (id_category);
