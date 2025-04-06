@@ -1,7 +1,7 @@
-package com.omatheusmesmo.shoppmate.service;
+package com.omatheusmesmo.shoppmate.unit.service;
 
-import com.omatheusmesmo.shoppmate.entity.Unit;
-import com.omatheusmesmo.shoppmate.repository.UnitRepository;
+import com.omatheusmesmo.shoppmate.unit.entity.Unit;
+import com.omatheusmesmo.shoppmate.unit.repository.UnitRepository;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

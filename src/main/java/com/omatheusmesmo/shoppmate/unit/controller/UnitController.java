@@ -1,7 +1,7 @@
-package com.omatheusmesmo.shoppmate.controller;
+package com.omatheusmesmo.shoppmate.unit.controller;
 
-import com.omatheusmesmo.shoppmate.entity.Unit;
-import com.omatheusmesmo.shoppmate.service.UnitService;
+import com.omatheusmesmo.shoppmate.unit.entity.Unit;
+import com.omatheusmesmo.shoppmate.unit.service.UnitService;
 import com.omatheusmesmo.shoppmate.utils.HttpResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;

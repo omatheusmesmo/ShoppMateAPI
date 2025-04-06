@@ -1,6 +1,6 @@
-package com.omatheusmesmo.shoppmate.repository;
+package com.omatheusmesmo.shoppmate.unit.repository;
 
-import com.omatheusmesmo.shoppmate.entity.Unit;
+import com.omatheusmesmo.shoppmate.unit.entity.Unit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
