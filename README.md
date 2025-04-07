@@ -20,8 +20,7 @@ ShoppMate is a RESTful API designed to help users manage their shopping lists ef
     * [Units (/unit)](#units-unit)
     * [Items (/item)](#items-item)
 * [Testing](#testing)
-* [Project Structure](#project-structure)
-* [Database Diagram](#database-diagram)
+* [Project Architecture](#architecture)
 * [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
@@ -369,8 +368,9 @@ Contributions are welcome! Please follow these steps:
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+Public License. See LICENSE.md
 
 ## Contact
 
-If you have any questions or suggestions, feel free to contact me at your-email@example.com
+If you have any questions or suggestions, feel free to contact me at matheus.6148@gmail.com
