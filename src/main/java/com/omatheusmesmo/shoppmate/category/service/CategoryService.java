@@ -19,6 +19,7 @@ public class CategoryService {
 
     public void saveCategory(Category category){
         isCategoryValid(category);
+        auditService.setAuditData(category,true);
         categoryRepository.save(category);
     }
 
