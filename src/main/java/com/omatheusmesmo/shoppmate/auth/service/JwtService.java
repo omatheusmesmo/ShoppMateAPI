@@ -1,4 +1,4 @@
-package com.omatheusmesmo.shoppmate.auth.service.service;
+package com.omatheusmesmo.shoppmate.auth.service;
 
 import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JOSEException;
@@ -21,6 +21,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -62,13 +63,58 @@ public class JwtService {
 
     public boolean validateToken(String token) {
         try {
+            JWTClaimsSet claims = decryptTokenInternal(token);
+
+            Date expirationTime = claims.getExpirationTime();
+            if (expirationTime == null || expirationTime.before(new Date())) {
+                logger.warn("Token has expired or expiration time is missing. Expiration: {}", expirationTime);
+                return false;
+            }
+
+            Date notBeforeTime = claims.getNotBeforeTime();
+            if (notBeforeTime != null && notBeforeTime.after(new Date())) {
+                logger.warn("Token not yet valid (not before time). Not Before: {}", notBeforeTime);
+                return false;
+            }
+
+            logger.debug("Token validation successful for subject: {}", claims.getSubject());
+            return true;
+
+        } catch (ParseException e) {
+
+            logger.error("Failed to parse JWT token string during validation: {}", e.getMessage());
+            return false;
+        } catch (JOSEException e) {
+
+            logger.error("Failed to decrypt JWT token during validation: {}", e.getMessage());
+            return false;
+        } catch (JwtServiceException e) {
+
+            logger.error("JWT Service Exception during validation: {}", e.getMessage());
+            return false;
+        } catch (Exception e) {
+
+            logger.error("Unexpected error during JWT validation: {}", e.getMessage(), e);
+            return false;
+        }
+    }
+
+    private JWTClaimsSet decryptTokenInternal(String token) throws ParseException, JOSEException, JwtServiceException {
+        try {
             EncryptedJWT encryptedJWT = EncryptedJWT.parse(token);
             encryptedJWT.decrypt(decrypter);
-            SignedJWT signedJWT = encryptedJWT.getPayload().toSignedJWT();
-            return signedJWT != null && signedJWT.verify(new RSASSAVerifier(publicKey));
+            return encryptedJWT.getJWTClaimsSet();
+        } catch (ParseException e) {
+
+            logger.error("Failed to parse token string: {}", e.getMessage());
+            throw e;
+        } catch (JOSEException e) {
+
+            logger.error("Failed to decrypt token. Check if the correct private key is used and token format is valid. Error: {}", e.getMessage());
+            throw e;
         } catch (Exception e) {
-            logger.error("Invalid token", e);
-            throw new JwtServiceException("Invalid token", e);
+            logger.error("Unexpected error during token decryption: {}", e.getMessage(), e);
+            throw new JwtServiceException("Unexpected error during token decryption", e);
         }
     }
 
