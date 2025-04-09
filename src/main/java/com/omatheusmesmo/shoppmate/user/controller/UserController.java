@@ -24,12 +24,12 @@ public class UserController {
     @Operation(summary = "Return all users")
     @GetMapping("/users")
     public List<User> getUsers() {
-        return userService.getUsers();
+        return userService.findUsers();
     }
 
     @Operation(summary = "Return a user by id")
     @GetMapping("/userDetailsService/{id}")
     public User getUser(@PathVariable Long id) {
-        return userService.getUser(id);
+        return userService.findUser(id);
     }
 }

@@ -46,7 +46,7 @@ public class ItemService {
         }
     }
 
-    public Optional<Item> findItemById(Long id) {
+    public Optional<Item> findItemById(Long id) throws NoSuchElementException{
         Optional<Item> foundItem = itemRepository.findById(id);
         if (foundItem.isPresent()) {
             return foundItem;

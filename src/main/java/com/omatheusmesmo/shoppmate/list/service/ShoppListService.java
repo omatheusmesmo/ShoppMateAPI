@@ -36,7 +36,7 @@ public class ShoppListService {
     }
     
     private User getOwnerId(ShoppList shoppList){
-        return userService.getUser(shoppList.getOwner().getId());
+        return userService.findUser(shoppList.getOwner().getId());
     }
 
     public Optional<ShoppList> findList(ShoppList shoppList) {

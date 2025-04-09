@@ -3,13 +3,17 @@ package com.omatheusmesmo.shoppmate.list.entity;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
 import com.omatheusmesmo.shoppmate.shared.domain.BaseAuditableEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "list_items")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ShoppListItem extends BaseAuditableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

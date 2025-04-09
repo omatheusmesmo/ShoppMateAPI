@@ -25,15 +25,19 @@ public class ShoppListItemService {
     private AuditService auditService;
 
     public ShoppListItem addShoppItemList(ShoppListItem shoppListItem) {
-        isListValid(shoppListItem);
+        isListItemValid(shoppListItem);
         auditService.setAuditData(shoppListItem, true);
         shoppListItemRepository.save(shoppListItem);
         return shoppListItem;
     }
 
-    public void isListValid(ShoppListItem shoppListItem) {
+    public void isListItemValid(ShoppListItem shoppListItem) throws NoSuchElementException {
+        itemService.findItemById(shoppListItem.getItem().getId());
+        shoppListService.findListById(shoppListItem.getShoppList().getId());
+
         itemService.isItemValid(shoppListItem.getItem());
         shoppListService.isListValid(shoppListItem.getShoppList());
+
         checkQuantity(shoppListItem);
     }
 
@@ -44,22 +48,15 @@ public class ShoppListItemService {
     }
 
 
-    public Optional<ShoppListItem> findListItem(ShoppListItem shoppListItem) {
-        Optional<ShoppListItem> foundList = shoppListItemRepository.findById(shoppListItem.getId());
-        if (foundList.isPresent()) {
-            return foundList;
-        } else {
-            throw new NoSuchElementException("ShoppingList not found");
-        }
+    public ShoppListItem findListItem(ShoppListItem shoppListItem) {
+        return shoppListItemRepository.findById(shoppListItem.getId())
+                .orElseThrow(() -> new NoSuchElementException("ShoppListItem not found"));
+
     }
 
-    public Optional<ShoppListItem> findListItemById(Long id) {
-        Optional<ShoppListItem> foundList = shoppListItemRepository.findById(id);
-        if (foundList.isPresent()) {
-            return foundList;
-        } else {
-            throw new NoSuchElementException("ShoppingListItem not found");
-        }
+    public ShoppListItem findListItemById(Long id) {
+        return shoppListItemRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("ShoppingListItem not found"));
     }
 
     public void removeList(Long id) {
@@ -69,7 +66,7 @@ public class ShoppListItemService {
 
     public ShoppListItem editList(ShoppListItem shoppListItem) {
         findListItemById(shoppListItem.getId());
-        isListValid(shoppListItem);
+        isListItemValid(shoppListItem);
         shoppListItemRepository.save(shoppListItem);
         return shoppListItem;
     }

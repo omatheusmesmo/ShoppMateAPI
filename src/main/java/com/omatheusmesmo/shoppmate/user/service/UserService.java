@@ -69,11 +69,11 @@ public class UserService {
         }
     }
 
-    public List<User> getUsers() {
+    public List<User> findUsers() {
         return userRepository.findAll();
     }
 
-    public User getUser(Long id) {
+    public User findUser(Long id) {
         return userRepository.findById(id).orElseThrow();
     }
 
