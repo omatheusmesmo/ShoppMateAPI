@@ -6,7 +6,7 @@ import com.omatheusmesmo.shoppmate.item.controller.ItemController;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
 import com.omatheusmesmo.shoppmate.unit.entity.Unit;
 import com.omatheusmesmo.shoppmate.item.service.ItemService;
-import com.omatheusmesmo.shoppmate.auth.service.service.JwtService;
+import com.omatheusmesmo.shoppmate.auth.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -2,7 +2,7 @@ package com.omatheusmesmo.shoppmate.auth.controller;
 
 import com.omatheusmesmo.shoppmate.utils.dtos.LoginRequest;
 import com.omatheusmesmo.shoppmate.user.entity.User;
-import com.omatheusmesmo.shoppmate.auth.service.service.JwtService;
+import com.omatheusmesmo.shoppmate.auth.service.JwtService;
 import com.omatheusmesmo.shoppmate.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class AuthController {
     UserDetailsService userDetailsService;
 
     @Operation(summary = "Register a User")
-    @PostMapping("/register/userDetailsService")
+    @PostMapping("/sign")
     public ResponseEntity<User> registerUser(@RequestBody User user){
         userService.addUser(user);
         return ResponseEntity.ok(user);

@@ -1,4 +1,4 @@
-package com.omatheusmesmo.shoppmate.auth.service.service;
+package com.omatheusmesmo.shoppmate.auth.service;
 
 
 import com.omatheusmesmo.shoppmate.user.entity.User;
