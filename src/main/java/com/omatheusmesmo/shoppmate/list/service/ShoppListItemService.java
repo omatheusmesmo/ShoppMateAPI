@@ -60,13 +60,15 @@ public class ShoppListItemService {
     }
 
     public void removeList(Long id) {
-        findListItemById(id);
-        shoppListItemRepository.deleteById(id);
+        ShoppListItem deletedItem = findListItemById(id);
+        auditService.softDelete(deletedItem);
+        shoppListItemRepository.save(deletedItem);
     }
 
     public ShoppListItem editList(ShoppListItem shoppListItem) {
         findListItemById(shoppListItem.getId());
         isListItemValid(shoppListItem);
+        auditService.setAuditData(shoppListItem, false);
         shoppListItemRepository.save(shoppListItem);
         return shoppListItem;
     }

@@ -16,7 +16,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class ShoppListItemServiceTest {
@@ -89,18 +88,69 @@ class ShoppListItemServiceTest {
 
     @Test
     void findListItemById() {
+        when(shoppListItemRepository.findById(listItem.getId())).thenReturn(Optional.of(listItem));
+
+        ShoppListItem result =  service.findListItemById(listItem.getId());
+
+        assertNotNull(result);
+
+        verify(shoppListItemRepository,times(1)).findById(listItem.getId());
     }
 
     @Test
-    void removeList() {
+    void findListItemById_WhenItemNotFound(){
+        when(shoppListItemRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, ()->service.findListItemById(999L));
+
+        verify(shoppListItemRepository, never()).save(any());
     }
 
     @Test
-    void editList() {
+    void removeList_Ok() {
+        when(shoppListItemRepository.findById(listItem.getId())).thenReturn(Optional.of(listItem));
+
+        assertDoesNotThrow(()->service.removeList(listItem.getId()));
+
+        verify(shoppListItemRepository, times(1)).save(listItem);
+        verify(auditService, times(1)).softDelete(listItem);
+    }
+
+    @Test
+    void removeList_ItemNotFound() {
+        when(shoppListItemRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, ()->service.removeList(999L));
+
+        verify(shoppListItemRepository, never()).save(any());
+        verify(auditService, never()).softDelete(any());
+    }
+
+    @Test
+    void editList_Ok() {
+        when(shoppListItemRepository.findById(listItem.getId())).thenReturn(Optional.of(listItem));
+
+        assertDoesNotThrow(() -> service.editList(listItem));
+
+        verify(auditService, times(1)).setAuditData(listItem,false);
+        verify(shoppListItemRepository, times(1)).save(listItem);
+    }
+
+    @Test
+    void editList_WhenListItemNotFound() {
+        when(shoppListItemRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> service.editList(listItem));
+
+        verify(shoppListItemRepository, times(1)).findById(listItem.getId());
     }
 
     @Test
     void findAll() {
+
+        assertDoesNotThrow(() -> service.findAll());
+
+        verify(shoppListItemRepository, times(1)).findAll();
     }
     
     private ShoppListItem createSampleItem(){
