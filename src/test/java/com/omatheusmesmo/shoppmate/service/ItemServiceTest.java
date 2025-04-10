@@ -109,11 +109,10 @@ class ItemServiceTest {
         when(itemRepository.findById(id)).thenReturn(Optional.of(item));
 
         // Act
-        Optional<Item> result = itemService.findItemById(id);
+        Item result = itemService.findById(id);
 
         // Assert
-        assertTrue(result.isPresent());
-        assertEquals(item, result.get());
+        assertEquals(item, result);
         verify(itemRepository, times(1)).findById(id);
     }
 
@@ -124,7 +123,7 @@ class ItemServiceTest {
         when(itemRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(NoSuchElementException.class, () -> itemService.findItemById(id));
+        assertThrows(NoSuchElementException.class, () -> itemService.findById(id));
         verify(itemRepository, times(1)).findById(id);
     }
 

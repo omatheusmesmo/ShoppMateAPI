@@ -60,7 +60,7 @@ class ShoppListItemServiceTest {
         assertDoesNotThrow( () -> service.isListItemValid(listItem));
 
         verify(itemService, times(1)).isItemValid(listItem.getItem());
-        verify(itemService, times(1)).findItemById(1L);
+        verify(itemService, times(1)).findById(1L);
         verify(shoppListService, times(1)).isListValid(listItem.getShoppList());
     }
 
@@ -71,7 +71,7 @@ class ShoppListItemServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.isListItemValid(listItem));
 
         verify(itemService, times(1)).isItemValid(listItem.getItem());
-        verify(itemService, times(1)).findItemById(1L);
+        verify(itemService, times(1)).findById(1L);
         verify(shoppListService, times(1)).isListValid(listItem.getShoppList());
     }
 
