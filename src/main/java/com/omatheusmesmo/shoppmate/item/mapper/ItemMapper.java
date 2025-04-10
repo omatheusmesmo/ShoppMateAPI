@@ -3,7 +3,7 @@ package com.omatheusmesmo.shoppmate.item.mapper;
 import com.omatheusmesmo.shoppmate.category.dto.CategoryResponseDTO;
 import com.omatheusmesmo.shoppmate.category.entity.Category;
 import com.omatheusmesmo.shoppmate.category.repository.CategoryRepository;
-import com.omatheusmesmo.shoppmate.item.dto.ItemDTORequest;
+import com.omatheusmesmo.shoppmate.item.dto.ItemRequestDTO;
 import com.omatheusmesmo.shoppmate.item.dto.ItemResponseDTO;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
 import com.omatheusmesmo.shoppmate.unit.dto.UnitResponseDTO;
@@ -24,7 +24,7 @@ public class ItemMapper {
     private UnitRepository unitRepository;
 
 
-    public Item toEntity(ItemDTORequest dto) {
+    public Item toEntity(ItemRequestDTO dto) {
         Category category = categoryRepository.findById(dto.idCategory())
                 .orElseThrow(() -> new NoSuchElementException("Category not found with id: " + dto.idCategory()));
 

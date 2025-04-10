@@ -3,7 +3,7 @@ package com.omatheusmesmo.shoppmate.item.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record ItemDTORequest(@NotBlank (message = "Item name cannot be blank")
+public record ItemRequestDTO(@NotBlank (message = "Item name cannot be blank")
                       String name,
 
                              @NotNull (message = "Category ID cannot be null")

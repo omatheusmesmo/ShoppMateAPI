@@ -1,6 +1,6 @@
 package com.omatheusmesmo.shoppmate.item.controller;
 
-import com.omatheusmesmo.shoppmate.item.dto.ItemDTORequest;
+import com.omatheusmesmo.shoppmate.item.dto.ItemRequestDTO;
 import com.omatheusmesmo.shoppmate.item.dto.ItemResponseDTO;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
 import com.omatheusmesmo.shoppmate.item.mapper.ItemMapper;
@@ -37,7 +37,7 @@ public class ItemController {
 
     @Operation(summary = "Add a new item")
     @PostMapping
-    public ResponseEntity<ItemResponseDTO> addItem(@Valid @RequestBody ItemDTORequest itemDTO) {
+    public ResponseEntity<ItemResponseDTO> addItem(@Valid @RequestBody ItemRequestDTO itemDTO) {
 
         Item item = itemMapper.toEntity(itemDTO);
         Item savedItem = itemService.addItem(item);
@@ -61,7 +61,7 @@ public class ItemController {
 
     @Operation(summary = "Update a item")
     @PutMapping("/{id}")
-    public ResponseEntity<ItemResponseDTO> updateItem(@PathVariable Long id, @Valid @RequestBody ItemDTORequest itemDTO) {
+    public ResponseEntity<ItemResponseDTO> updateItem(@PathVariable Long id, @Valid @RequestBody ItemRequestDTO itemDTO) {
 
         Item itemToUpdate = itemMapper.toEntity(itemDTO);
         itemToUpdate.setId(id);
