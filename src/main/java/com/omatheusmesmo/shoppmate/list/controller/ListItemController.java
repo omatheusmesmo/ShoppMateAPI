@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/shopplist/{shopplistId}/items")
+@RequestMapping("/lists/{shopplistId}/items")
 public class ListItemController {
 
     @Autowired

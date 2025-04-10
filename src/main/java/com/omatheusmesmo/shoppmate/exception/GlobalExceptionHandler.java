@@ -87,6 +87,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
+    //TODO -> InvalidDataAccessApiUsageException
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleAllUncaughtException(Exception ex) {
         log.error("An unexpected error occurred: {}", ex.getMessage(), ex);

@@ -1,43 +1,53 @@
 package com.omatheusmesmo.shoppmate.list.controller;
 
+import com.omatheusmesmo.shoppmate.list.dtos.ShoppingListRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.ShoppingListResponseDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ShoppingList;
+import com.omatheusmesmo.shoppmate.list.mapper.ListMapper;
 import com.omatheusmesmo.shoppmate.list.service.ShoppingListService;
 import com.omatheusmesmo.shoppmate.utils.HttpResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/ShoppingLists")
+@RequestMapping("/lists")
 public class ShoppingListController {
 
     @Autowired
     private ShoppingListService service;
 
+    @Autowired
+    private ListMapper listMapper;
+
     @Operation(description = "Return all ShoppingLists")
     @GetMapping
     public ResponseEntity<List<ShoppingList>> getAllShoppingLists() {
-        try {
+
             List<ShoppingList> ShoppingLists = service.findAll();
             return HttpResponseUtil.ok(ShoppingLists);
-        } catch (Exception e) {
-            return HttpResponseUtil.internalServerError();
-        }
     }
 
     @Operation(summary = "Add a new ShoppingList")
     @PostMapping
-    public ResponseEntity<ShoppingList> addShoppingList(@RequestBody ShoppingList ShoppingList) {
-        try {
-            ShoppingList addedShoppingList = service.saveList(ShoppingList);
-            return HttpResponseUtil.created(addedShoppingList);
-        } catch (IllegalArgumentException e) {
-            return HttpResponseUtil.badRequest(ShoppingList);
-        }
+    public ResponseEntity<ShoppingListResponseDTO> addShoppingList(@RequestBody ShoppingListRequestDTO dto) {
+        ShoppingList shoppingList = listMapper.toEntity(dto);
+        ShoppingList savedList = service.saveList(shoppingList);
+        ShoppingListResponseDTO responseDTO = listMapper.toResponseDTO(savedList);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedList.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(responseDTO);
     }
 
     @Operation(summary = "Delete a ShoppingList by id")
