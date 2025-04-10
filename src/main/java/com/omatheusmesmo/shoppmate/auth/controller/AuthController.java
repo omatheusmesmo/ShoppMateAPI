@@ -44,9 +44,4 @@ public class AuthController {
 
         return ResponseEntity.ok(token);
     }
-
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello World";
-    }
 }
