@@ -1,6 +1,8 @@
 package com.omatheusmesmo.shoppmate.item.controller;
 
+import com.omatheusmesmo.shoppmate.item.dto.ItemDTO;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
+import com.omatheusmesmo.shoppmate.item.mapper.ItemMapper;
 import com.omatheusmesmo.shoppmate.item.service.ItemService;
 import com.omatheusmesmo.shoppmate.utils.HttpResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +19,8 @@ public class ItemController {
 
     @Autowired
     private ItemService itemService;
+    @Autowired
+    private ItemMapper itemMapper;
 
     @Operation(summary = "Return all items")
     @GetMapping
@@ -24,17 +28,18 @@ public class ItemController {
         try {
             List<Item> items = itemService.findAll();
             return HttpResponseUtil.ok(items);
-        } catch (Exception e) {
+        } catch (Exception e) {                 //TODO: return correct error when is DB off or there is no item
             return HttpResponseUtil.internalServerError();
         }
     }
 
     @Operation(summary = "Add a new item")
     @PostMapping
-    public ResponseEntity<Item> addItem(@RequestBody Item item) {
+    public ResponseEntity<Item> addItem(@RequestBody ItemDTO itemDTO) {
+        Item item = null;
         try {
-            Item addedItem = itemService.addItem(item);
-            return HttpResponseUtil.created(addedItem);
+            item = itemMapper.toEntity(itemDTO);
+            return HttpResponseUtil.created(itemService.addItem(item));
         } catch (IllegalArgumentException e) {
             return HttpResponseUtil.badRequest(item);
         }

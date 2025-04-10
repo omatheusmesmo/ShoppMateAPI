@@ -2,6 +2,7 @@ package com.omatheusmesmo.shoppmate.item.service;
 
 import com.omatheusmesmo.shoppmate.category.service.CategoryService;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
+import com.omatheusmesmo.shoppmate.item.mapper.ItemMapper;
 import com.omatheusmesmo.shoppmate.item.repository.ItemRepository;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
 import com.omatheusmesmo.shoppmate.unit.service.UnitService;
@@ -17,6 +18,7 @@ public class ItemService {
 
     @Autowired
     private ItemRepository itemRepository;
+
     @Autowired
     private AuditService auditService;
     @Autowired

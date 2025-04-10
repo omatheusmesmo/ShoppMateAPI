@@ -17,7 +17,7 @@ import lombok.Setter;
 public class Item extends DomainEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_column", nullable = false)
+    @JoinColumn(name = "id_category", nullable = false)
     private Category category;
 
     @OneToOne(fetch = FetchType.LAZY)
