@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class ShoppListItemService {
@@ -32,7 +31,7 @@ public class ShoppListItemService {
     }
 
     public void isListItemValid(ShoppListItem shoppListItem) throws NoSuchElementException {
-        itemService.findItemById(shoppListItem.getItem().getId());
+        itemService.findById(shoppListItem.getItem().getId());
         shoppListService.findListById(shoppListItem.getShoppList().getId());
 
         itemService.isItemValid(shoppListItem.getItem());

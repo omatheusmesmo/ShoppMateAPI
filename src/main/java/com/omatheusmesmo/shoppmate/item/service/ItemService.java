@@ -2,7 +2,6 @@ package com.omatheusmesmo.shoppmate.item.service;
 
 import com.omatheusmesmo.shoppmate.category.service.CategoryService;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
-import com.omatheusmesmo.shoppmate.item.mapper.ItemMapper;
 import com.omatheusmesmo.shoppmate.item.repository.ItemRepository;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
 import com.omatheusmesmo.shoppmate.unit.service.UnitService;
@@ -48,23 +47,19 @@ public class ItemService {
         }
     }
 
-    public Optional<Item> findItemById(Long id) throws NoSuchElementException{
-        Optional<Item> foundItem = itemRepository.findById(id);
-        if (foundItem.isPresent()) {
-            return foundItem;
-        } else {
-            throw new NoSuchElementException("Item not found");
-        }
+    public Item findById(Long id){
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Unit not found with id: " + id));
     }
     //TODO remove item by item
     public void removeItem(Long id) {
-        findItemById(id);
+        findById(id);
         //auditService.softDelete(item);
         itemRepository.deleteById(id);
     }
 
     public Item editItem(Item item) {
-        findItemById(item.getId());
+        findById(item.getId());
         isItemValid(item);
         auditService.setAuditData(item, false);
         itemRepository.save(item);
