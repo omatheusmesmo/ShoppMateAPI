@@ -1,17 +1,20 @@
 package com.omatheusmesmo.shoppmate.item.controller;
 
-import com.omatheusmesmo.shoppmate.item.dto.ItemDTO;
+import com.omatheusmesmo.shoppmate.item.dto.ItemDTORequest;
+import com.omatheusmesmo.shoppmate.item.dto.ItemResponseDTO;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
 import com.omatheusmesmo.shoppmate.item.mapper.ItemMapper;
 import com.omatheusmesmo.shoppmate.item.service.ItemService;
-import com.omatheusmesmo.shoppmate.utils.HttpResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/item")
@@ -24,48 +27,56 @@ public class ItemController {
 
     @Operation(summary = "Return all items")
     @GetMapping
-    public ResponseEntity<List<Item>> getAllItems() {
-        try {
-            List<Item> items = itemService.findAll();
-            return HttpResponseUtil.ok(items);
-        } catch (Exception e) {                 //TODO: return correct error when is DB off or there is no item
-            return HttpResponseUtil.internalServerError();
-        }
+    public ResponseEntity<List<ItemResponseDTO>> getAllItems() {
+        List<Item> items = itemService.findAll();
+        List<ItemResponseDTO> responseDTOs = items.stream()
+                .map(itemMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(responseDTOs);
     }
 
     @Operation(summary = "Add a new item")
     @PostMapping
-    public ResponseEntity<Item> addItem(@RequestBody ItemDTO itemDTO) {
-        Item item = null;
-        try {
-            item = itemMapper.toEntity(itemDTO);
-            return HttpResponseUtil.created(itemService.addItem(item));
-        } catch (IllegalArgumentException e) {
-            return HttpResponseUtil.badRequest(item);
-        }
+    public ResponseEntity<ItemResponseDTO> addItem(@Valid @RequestBody ItemDTORequest itemDTO) {
+
+        Item item = itemMapper.toEntity(itemDTO);
+        Item savedItem = itemService.addItem(item);
+        ItemResponseDTO responseDTO = itemMapper.toResponseDTO(savedItem);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedItem.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(responseDTO);
     }
 
     @Operation(summary = "Delete a item by id")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
-        try {
-            itemService.removeItem(id);
-            return HttpResponseUtil.noContent();
-        } catch (NoSuchElementException exception) {
-            return HttpResponseUtil.notFound();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteItem(@PathVariable Long id) {
+        itemService.removeItem(id);
     }
 
     @Operation(summary = "Update a item")
-    @PutMapping
-    public ResponseEntity<Item> updateItem(@RequestBody Item item) {
-        try {
-            itemService.editItem(item);
-            return HttpResponseUtil.ok(item);
-        } catch (NoSuchElementException noSuchElementException) {
-            return HttpResponseUtil.notFound();
-        } catch (IllegalArgumentException illegalArgumentException) {
-            return HttpResponseUtil.badRequest(item);
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<ItemResponseDTO> updateItem(@PathVariable Long id, @Valid @RequestBody ItemDTORequest itemDTO) {
+
+        Item itemToUpdate = itemMapper.toEntity(itemDTO);
+        itemToUpdate.setId(id);
+
+        Item updatedItem = itemService.editItem(itemToUpdate);
+        ItemResponseDTO responseDTO = itemMapper.toResponseDTO(updatedItem);
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @Operation(summary = "Get an item by id")
+    @GetMapping("/{id}")
+    public ResponseEntity<ItemResponseDTO> getItemById(@PathVariable Long id) {
+        Item item = itemService.findById(id);
+        ItemResponseDTO responseDTO = itemMapper.toResponseDTO(item);
+        return ResponseEntity.ok(responseDTO);
     }
 }
