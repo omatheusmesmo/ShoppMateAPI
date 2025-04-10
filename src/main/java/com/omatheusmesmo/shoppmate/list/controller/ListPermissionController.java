@@ -13,14 +13,14 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/shopplist/{shopplistId}/permissions")
-public class ShoppListUserPermissionController {
+public class ListPermissionController {
 
     @Autowired
     private ListPermissionService service;
 
-    @Operation(description = "Return all ShoppListUserPermissions")
+    @Operation(description = "Return all ListPermissions")
     @GetMapping
-    public ResponseEntity<List<ListPermission>> getAllShoppListUserPermissions() {
+    public ResponseEntity<List<ListPermission>> getAllListPermissions() {
         try {
             List<ListPermission> listPermissions = service.findAll();
             return HttpResponseUtil.ok(listPermissions);
@@ -29,20 +29,20 @@ public class ShoppListUserPermissionController {
         }
     }
 
-    @Operation(summary = "Add a new shoppListUserPermission")
+    @Operation(summary = "Add a new ListPermission")
     @PostMapping
-    public ResponseEntity<ListPermission> addShoppListUserPermission(@RequestBody ListPermission listPermission) {
+    public ResponseEntity<ListPermission> addListPermission(@RequestBody ListPermission listPermission) {
         try {
-            ListPermission addedListPermission = service.addShoppListUserPermission(listPermission);
+            ListPermission addedListPermission = service.addListPermission(listPermission);
             return HttpResponseUtil.created(addedListPermission);
         } catch (IllegalArgumentException e) {
             return HttpResponseUtil.badRequest(listPermission);
         }
     }
 
-    @Operation(summary = "Delete a shoppListUserPermission by id")
+    @Operation(summary = "Delete a ListPermission by id")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteShoppListUserPermission(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteListPermission(@PathVariable Long id) {
         try {
             service.removeList(id);
             return HttpResponseUtil.noContent();
@@ -51,9 +51,9 @@ public class ShoppListUserPermissionController {
         }
     }
 
-    @Operation(summary = "Update a shoppListUserPermission")
+    @Operation(summary = "Update a ListPermission")
     @PutMapping
-    public ResponseEntity<ListPermission> updateShoppListUserPermission(@RequestBody ListPermission listPermission) {
+    public ResponseEntity<ListPermission> updateListPermission(@RequestBody ListPermission listPermission) {
         try {
             service.editList(listPermission);
             return HttpResponseUtil.ok(listPermission);

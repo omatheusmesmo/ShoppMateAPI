@@ -2,8 +2,8 @@ package com.omatheusmesmo.shoppmate.list.service;
 
 import com.omatheusmesmo.shoppmate.item.entity.Item;
 import com.omatheusmesmo.shoppmate.item.service.ItemService;
-import com.omatheusmesmo.shoppmate.list.entity.ShoppListItem;
-import com.omatheusmesmo.shoppmate.list.entity.ShoppList;
+import com.omatheusmesmo.shoppmate.list.entity.ListItem;
+import com.omatheusmesmo.shoppmate.list.entity.ShoppingList;
 import com.omatheusmesmo.shoppmate.list.repository.ListItemRepository;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,69 +32,69 @@ class ShoppingListItemServiceTest {
     @InjectMocks
     private ListItemService service;
 
-    private ShoppListItem shoppListItem;
+    private ListItem ListItem;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        shoppListItem = createSampleItem();
+        ListItem = createSampleItem();
     }
 
     @Test
     void addShoppItemList() {
-        when(ListItemRepository.save(shoppListItem)).thenReturn(shoppListItem);
+        when(ListItemRepository.save(ListItem)).thenReturn(ListItem);
         
-        ShoppListItem savedItem = service.addShoppItemList(shoppListItem);
+        ListItem savedItem = service.addShoppItemList(ListItem);
         
         assertNotNull(savedItem);
-        assertEquals(savedItem, shoppListItem);
-        verify(itemService, times(1)).isItemValid(shoppListItem.getItem());
-        verify(shoppingListService, times(1)).isListValid(shoppListItem.getShoppList());
-        verify(auditService, times(1)).setAuditData(shoppListItem, true);
-        verify(ListItemRepository, times(1)).save(shoppListItem);
+        assertEquals(savedItem, ListItem);
+        verify(itemService, times(1)).isItemValid(ListItem.getItem());
+        verify(shoppingListService, times(1)).isListValid(ListItem.getShoppList());
+        verify(auditService, times(1)).setAuditData(ListItem, true);
+        verify(ListItemRepository, times(1)).save(ListItem);
     }
 
     @Test
     void isListItemValid_NoException() {
 
-        assertDoesNotThrow( () -> service.isListItemValid(shoppListItem));
+        assertDoesNotThrow( () -> service.isListItemValid(ListItem));
 
-        verify(itemService, times(1)).isItemValid(shoppListItem.getItem());
+        verify(itemService, times(1)).isItemValid(ListItem.getItem());
         verify(itemService, times(1)).findById(1L);
-        verify(shoppingListService, times(1)).isListValid(shoppListItem.getShoppList());
+        verify(shoppingListService, times(1)).isListValid(ListItem.getShoppList());
     }
 
     @Test
     void isListItemValid_InvalidItemQuantity() {
-        shoppListItem.setQuantity(null);
+        ListItem.setQuantity(null);
 
-        assertThrows(IllegalArgumentException.class, () -> service.isListItemValid(shoppListItem));
+        assertThrows(IllegalArgumentException.class, () -> service.isListItemValid(ListItem));
 
-        verify(itemService, times(1)).isItemValid(shoppListItem.getItem());
+        verify(itemService, times(1)).isItemValid(ListItem.getItem());
         verify(itemService, times(1)).findById(1L);
-        verify(shoppingListService, times(1)).isListValid(shoppListItem.getShoppList());
+        verify(shoppingListService, times(1)).isListValid(ListItem.getShoppList());
     }
 
     @Test
     void findListItem() {
-        when(ListItemRepository.findById(shoppListItem.getId())).thenReturn(Optional.of(shoppListItem));
+        when(ListItemRepository.findById(ListItem.getId())).thenReturn(Optional.of(ListItem));
 
-        ShoppListItem result =  service.findListItem(shoppListItem);
+        ListItem result =  service.findListItem(ListItem);
 
         assertNotNull(result);
 
-        verify(ListItemRepository,times(1)).findById(shoppListItem.getId());
+        verify(ListItemRepository,times(1)).findById(ListItem.getId());
     }
 
     @Test
     void findListItemById() {
-        when(ListItemRepository.findById(shoppListItem.getId())).thenReturn(Optional.of(shoppListItem));
+        when(ListItemRepository.findById(ListItem.getId())).thenReturn(Optional.of(ListItem));
 
-        ShoppListItem result =  service.findListItemById(shoppListItem.getId());
+        ListItem result =  service.findListItemById(ListItem.getId());
 
         assertNotNull(result);
 
-        verify(ListItemRepository,times(1)).findById(shoppListItem.getId());
+        verify(ListItemRepository,times(1)).findById(ListItem.getId());
     }
 
     @Test
@@ -108,12 +108,12 @@ class ShoppingListItemServiceTest {
 
     @Test
     void removeList_Ok() {
-        when(ListItemRepository.findById(shoppListItem.getId())).thenReturn(Optional.of(shoppListItem));
+        when(ListItemRepository.findById(ListItem.getId())).thenReturn(Optional.of(ListItem));
 
-        assertDoesNotThrow(()->service.removeList(shoppListItem.getId()));
+        assertDoesNotThrow(()->service.removeList(ListItem.getId()));
 
-        verify(ListItemRepository, times(1)).save(shoppListItem);
-        verify(auditService, times(1)).softDelete(shoppListItem);
+        verify(ListItemRepository, times(1)).save(ListItem);
+        verify(auditService, times(1)).softDelete(ListItem);
     }
 
     @Test
@@ -128,21 +128,21 @@ class ShoppingListItemServiceTest {
 
     @Test
     void editList_Ok() {
-        when(ListItemRepository.findById(shoppListItem.getId())).thenReturn(Optional.of(shoppListItem));
+        when(ListItemRepository.findById(ListItem.getId())).thenReturn(Optional.of(ListItem));
 
-        assertDoesNotThrow(() -> service.editList(shoppListItem));
+        assertDoesNotThrow(() -> service.editList(ListItem));
 
-        verify(auditService, times(1)).setAuditData(shoppListItem,false);
-        verify(ListItemRepository, times(1)).save(shoppListItem);
+        verify(auditService, times(1)).setAuditData(ListItem,false);
+        verify(ListItemRepository, times(1)).save(ListItem);
     }
 
     @Test
     void editList_WhenListItemNotFound() {
         when(ListItemRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> service.editList(shoppListItem));
+        assertThrows(NoSuchElementException.class, () -> service.editList(ListItem));
 
-        verify(ListItemRepository, times(1)).findById(shoppListItem.getId());
+        verify(ListItemRepository, times(1)).findById(ListItem.getId());
     }
 
     @Test
@@ -153,14 +153,14 @@ class ShoppingListItemServiceTest {
         verify(ListItemRepository, times(1)).findAll();
     }
     
-    private ShoppListItem createSampleItem(){
+    private ListItem createSampleItem(){
         
-        ShoppList shoppList = new ShoppList();
-        shoppList.setId(1L);
+        ShoppingList shoppingList = new ShoppingList();
+        shoppingList.setId(1L);
         
         Item item = new Item();
         item.setId(1L);
 
-        return new ShoppListItem(shoppList,item,2,false);
+        return new ListItem(shoppingList,item,2,false);
     }
 }

@@ -1,9 +1,9 @@
-package com.omatheusmesmo.shoppmate.controller;
+package com.omatheusmesmo.shoppmate.item.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omatheusmesmo.shoppmate.category.entity.Category;
-import com.omatheusmesmo.shoppmate.item.controller.ItemController;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
+import com.omatheusmesmo.shoppmate.item.mapper.ItemMapper;
 import com.omatheusmesmo.shoppmate.unit.entity.Unit;
 import com.omatheusmesmo.shoppmate.item.service.ItemService;
 import com.omatheusmesmo.shoppmate.auth.service.JwtService;
@@ -38,6 +38,9 @@ class ItemControllerTest {
 
     @MockBean
     private ItemService itemService;
+
+    @MockBean
+    private ItemMapper itemMapper;
 
     @MockBean
     private JwtService jwtService;

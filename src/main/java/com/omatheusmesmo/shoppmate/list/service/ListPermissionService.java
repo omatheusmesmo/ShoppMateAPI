@@ -1,7 +1,7 @@
 package com.omatheusmesmo.shoppmate.list.service;
 
 import com.omatheusmesmo.shoppmate.list.entity.ListPermission;
-import com.omatheusmesmo.shoppmate.list.repository.ShoppListUserPermissionRepository;
+import com.omatheusmesmo.shoppmate.list.repository.ListPermissionRepository;
 import com.omatheusmesmo.shoppmate.user.service.UserService;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class ListPermissionService {
 
     @Autowired
-    private ShoppListUserPermissionRepository shoppListUserPermissionRepository;
+    private ListPermissionRepository listPermissionRepository;
 
     @Autowired
     private ShoppingListService shoppingListService;
@@ -24,10 +24,10 @@ public class ListPermissionService {
     @Autowired
     private AuditService auditService;
 
-    public ListPermission addShoppListUserPermission(ListPermission listPermission) {
+    public ListPermission addListPermission(ListPermission listPermission) {
         isListValid(listPermission);
         auditService.setAuditData(listPermission, true);
-        shoppListUserPermissionRepository.save(listPermission);
+        listPermissionRepository.save(listPermission);
         return listPermission;
     }
 
@@ -37,7 +37,7 @@ public class ListPermissionService {
     }
     
     public Optional<ListPermission> findListItem(ListPermission listPermission) {
-        Optional<ListPermission> foundList = shoppListUserPermissionRepository.findById(listPermission.getId());
+        Optional<ListPermission> foundList = listPermissionRepository.findById(listPermission.getId());
         if (foundList.isPresent()) {
             return foundList;
         } else {
@@ -46,7 +46,7 @@ public class ListPermissionService {
     }
 
     public Optional<ListPermission> findListUserPermissionById(Long id) {
-        Optional<ListPermission> foundList = shoppListUserPermissionRepository.findById(id);
+        Optional<ListPermission> foundList = listPermissionRepository.findById(id);
         if (foundList.isPresent()) {
             return foundList;
         } else {
@@ -56,17 +56,17 @@ public class ListPermissionService {
 
     public void removeList(Long id) {
         findListUserPermissionById(id);
-        shoppListUserPermissionRepository.deleteById(id);
+        listPermissionRepository.deleteById(id);
     }
 
     public ListPermission editList(ListPermission listPermission) {
         findListUserPermissionById(listPermission.getId());
         isListValid(listPermission);
-        shoppListUserPermissionRepository.save(listPermission);
+        listPermissionRepository.save(listPermission);
         return listPermission;
     }
 
     public List<ListPermission> findAll() {
-        return shoppListUserPermissionRepository.findAll();
+        return listPermissionRepository.findAll();
     }
 }
