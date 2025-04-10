@@ -1,9 +1,12 @@
 package com.omatheusmesmo.shoppmate.item.mapper;
 
+import com.omatheusmesmo.shoppmate.category.dto.CategoryResponseDTO;
 import com.omatheusmesmo.shoppmate.category.entity.Category;
 import com.omatheusmesmo.shoppmate.category.repository.CategoryRepository;
-import com.omatheusmesmo.shoppmate.item.dto.ItemDTO;
+import com.omatheusmesmo.shoppmate.item.dto.ItemDTORequest;
+import com.omatheusmesmo.shoppmate.item.dto.ItemResponseDTO;
 import com.omatheusmesmo.shoppmate.item.entity.Item;
+import com.omatheusmesmo.shoppmate.unit.dto.UnitResponseDTO;
 import com.omatheusmesmo.shoppmate.unit.entity.Unit;
 import com.omatheusmesmo.shoppmate.unit.repository.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,7 @@ public class ItemMapper {
     private UnitRepository unitRepository;
 
 
-    public Item toEntity(ItemDTO dto) {
+    public Item toEntity(ItemDTORequest dto) {
         Category category = categoryRepository.findById(dto.idCategory())
                 .orElseThrow(() -> new NoSuchElementException("Category not found with id: " + dto.idCategory()));
 
@@ -35,19 +38,18 @@ public class ItemMapper {
         return item;
     }
 
-//
-//    public ItemResponseDTO toResponseDTO(Item entity) {
-//
-//        CategoryDTO categoryDto = new CategoryDTO(entity.getCategory().getId(), entity.getCategory().getName());
-//        UnitDTO unitDto = new UnitDTO(entity.getUnit().getId(), entity.getUnit().getName(), entity.getUnit().getSymbol());
-//
-//        return new ItemResponseDTO(
-//                entity.getId(),
-//                entity.getName(),
-//                categoryDto,
-//                unitDto
-//
-//        );
-//    }
+
+    public ItemResponseDTO toResponseDTO(Item entity) {
+
+        CategoryResponseDTO categoryDto = new CategoryResponseDTO(entity.getCategory().getId(), entity.getCategory().getName());
+        UnitResponseDTO unitDto = new UnitResponseDTO(entity.getUnit().getId(), entity.getUnit().getSymbol());
+
+        return new ItemResponseDTO(
+                entity.getId(),
+                entity.getName(),
+                categoryDto,
+                unitDto
+        );
+    }
 
 }
