@@ -1,7 +1,7 @@
 package com.omatheusmesmo.shoppmate.list.controller;
 
-import com.omatheusmesmo.shoppmate.list.entity.ShoppListUserPermission;
-import com.omatheusmesmo.shoppmate.list.service.ShoppListUserPermissionService;
+import com.omatheusmesmo.shoppmate.list.entity.ListPermission;
+import com.omatheusmesmo.shoppmate.list.service.ListPermissionService;
 import com.omatheusmesmo.shoppmate.utils.HttpResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +16,14 @@ import java.util.NoSuchElementException;
 public class ShoppListUserPermissionController {
 
     @Autowired
-    private ShoppListUserPermissionService service;
+    private ListPermissionService service;
 
     @Operation(description = "Return all ShoppListUserPermissions")
     @GetMapping
-    public ResponseEntity<List<ShoppListUserPermission>> getAllShoppListUserPermissions() {
+    public ResponseEntity<List<ListPermission>> getAllShoppListUserPermissions() {
         try {
-            List<ShoppListUserPermission> shoppListUserPermissions = service.findAll();
-            return HttpResponseUtil.ok(shoppListUserPermissions);
+            List<ListPermission> listPermissions = service.findAll();
+            return HttpResponseUtil.ok(listPermissions);
         } catch (Exception e) {
             return HttpResponseUtil.internalServerError();
         }
@@ -31,12 +31,12 @@ public class ShoppListUserPermissionController {
 
     @Operation(summary = "Add a new shoppListUserPermission")
     @PostMapping
-    public ResponseEntity<ShoppListUserPermission> addShoppListUserPermission(@RequestBody ShoppListUserPermission shoppListUserPermission) {
+    public ResponseEntity<ListPermission> addShoppListUserPermission(@RequestBody ListPermission listPermission) {
         try {
-            ShoppListUserPermission addedShoppListUserPermission = service.addShoppListUserPermission(shoppListUserPermission);
-            return HttpResponseUtil.created(addedShoppListUserPermission);
+            ListPermission addedListPermission = service.addShoppListUserPermission(listPermission);
+            return HttpResponseUtil.created(addedListPermission);
         } catch (IllegalArgumentException e) {
-            return HttpResponseUtil.badRequest(shoppListUserPermission);
+            return HttpResponseUtil.badRequest(listPermission);
         }
     }
 
@@ -53,14 +53,14 @@ public class ShoppListUserPermissionController {
 
     @Operation(summary = "Update a shoppListUserPermission")
     @PutMapping
-    public ResponseEntity<ShoppListUserPermission> updateShoppListUserPermission(@RequestBody ShoppListUserPermission shoppListUserPermission) {
+    public ResponseEntity<ListPermission> updateShoppListUserPermission(@RequestBody ListPermission listPermission) {
         try {
-            service.editList(shoppListUserPermission);
-            return HttpResponseUtil.ok(shoppListUserPermission);
+            service.editList(listPermission);
+            return HttpResponseUtil.ok(listPermission);
         } catch (NoSuchElementException noSuchElementException) {
             return HttpResponseUtil.notFound();
         } catch (IllegalArgumentException illegalArgumentException) {
-            return HttpResponseUtil.badRequest(shoppListUserPermission);
+            return HttpResponseUtil.badRequest(listPermission);
         }
     }
 }

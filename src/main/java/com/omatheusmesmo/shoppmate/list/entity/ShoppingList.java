@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShoppList extends DomainEntity {
+public class ShoppingList extends DomainEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id_user", nullable = false)

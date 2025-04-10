@@ -10,11 +10,11 @@ import lombok.Setter;
 @Table(name = "list_user_permissions")
 @Getter
 @Setter
-public class ShoppListUserPermission extends BaseAuditableEntity {
+public class ListPermission extends BaseAuditableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_list", nullable = false)
-    private ShoppList shoppList;
+    private ShoppingList shoppingList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", nullable = false)

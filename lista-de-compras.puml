@@ -7,7 +7,7 @@ class List {
     LocalDateTime createdAt
     LocalDateTime updatedAt
     Boolean deleted
-    List<ListItem> listItems
+    List<ListItem> shoppListItems
     List<ListUserPermission> userPermissions
 }
 

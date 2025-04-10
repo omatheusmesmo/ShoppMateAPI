@@ -14,11 +14,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShoppListItem extends BaseAuditableEntity {
+public class ListItem extends BaseAuditableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_list", nullable = false)
-    private ShoppList shoppList;
+    private ShoppingList shoppList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_item", nullable = false)

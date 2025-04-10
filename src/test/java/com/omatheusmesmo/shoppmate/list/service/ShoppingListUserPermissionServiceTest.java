@@ -1,7 +1,7 @@
 package com.omatheusmesmo.shoppmate.list.service;
 
 import com.omatheusmesmo.shoppmate.list.entity.ShoppList;
-import com.omatheusmesmo.shoppmate.list.entity.ShoppListUserPermission;
+import com.omatheusmesmo.shoppmate.list.entity.ListPermission;
 import com.omatheusmesmo.shoppmate.list.repository.ShoppListUserPermissionRepository;
 import com.omatheusmesmo.shoppmate.user.service.UserService;
 import com.omatheusmesmo.shoppmate.user.entity.User;
@@ -21,13 +21,13 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ShoppListUserPermissionServiceTest {
+class ShoppingListUserPermissionServiceTest {
 
     @Mock
     private ShoppListUserPermissionRepository shoppListUserPermissionRepository;
 
     @Mock
-    private ShoppListService shoppListService;
+    private ShoppingListService shoppingListService;
 
     @Mock
     private UserService userService;
@@ -36,7 +36,7 @@ class ShoppListUserPermissionServiceTest {
     private AuditService auditService;
 
     @InjectMocks
-    private ShoppListUserPermissionService shoppListUserPermissionService;
+    private ListPermissionService listPermissionService;
 
     @BeforeEach
     void setUp() {
@@ -46,17 +46,17 @@ class ShoppListUserPermissionServiceTest {
     @Test
     void addShoppListUserPermission_ValidPermission_ReturnsSavedPermission() {
         // Arrange
-        ShoppListUserPermission permission = createSamplePermission();
+        ListPermission permission = createSamplePermission();
         when(shoppListUserPermissionRepository.save(permission)).thenReturn(permission);
 
         // Act
-        ShoppListUserPermission result = shoppListUserPermissionService.addShoppListUserPermission(permission);
+        ListPermission result = listPermissionService.addShoppListUserPermission(permission);
 
         // Assert
         assertNotNull(result);
         assertEquals(permission, result);
         verify(userService, times(1)).isUserValid(permission.getUser());
-        verify(shoppListService, times(1)).isListValid(permission.getShoppList());
+        verify(shoppingListService, times(1)).isListValid(permission.getShoppList());
         verify(auditService, times(1)).setAuditData(permission, true);
         verify(shoppListUserPermissionRepository, times(1)).save(permission);
     }
@@ -64,22 +64,22 @@ class ShoppListUserPermissionServiceTest {
     @Test
     void isListValid_ValidPermission_NoExceptionThrown() {
         // Arrange
-        ShoppListUserPermission permission = createSamplePermission();
+        ListPermission permission = createSamplePermission();
 
         // Act & Assert
-        assertDoesNotThrow(() -> shoppListUserPermissionService.isListValid(permission));
+        assertDoesNotThrow(() -> listPermissionService.isListValid(permission));
         verify(userService, times(1)).isUserValid(permission.getUser());
-        verify(shoppListService, times(1)).isListValid(permission.getShoppList());
+        verify(shoppingListService, times(1)).isListValid(permission.getShoppList());
     }
 
     @Test
     void findListItem_ExistingPermission_ReturnsPermission() {
         // Arrange
-        ShoppListUserPermission permission = createSamplePermission();
+        ListPermission permission = createSamplePermission();
         when(shoppListUserPermissionRepository.findById(permission.getId())).thenReturn(Optional.of(permission));
 
         // Act
-        Optional<ShoppListUserPermission> result = shoppListUserPermissionService.findListItem(permission);
+        Optional<ListPermission> result = listPermissionService.findListItem(permission);
 
         // Assert
         assertTrue(result.isPresent());
@@ -90,11 +90,11 @@ class ShoppListUserPermissionServiceTest {
     @Test
     void findListItem_NonExistingPermission_ThrowsNoSuchElementException() {
         // Arrange
-        ShoppListUserPermission permission = createSamplePermission();
+        ListPermission permission = createSamplePermission();
         when(shoppListUserPermissionRepository.findById(permission.getId())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(NoSuchElementException.class, () -> shoppListUserPermissionService.findListItem(permission));
+        assertThrows(NoSuchElementException.class, () -> listPermissionService.findListItem(permission));
         verify(shoppListUserPermissionRepository, times(1)).findById(permission.getId());
     }
 
@@ -102,12 +102,12 @@ class ShoppListUserPermissionServiceTest {
     void findListUserPermissionById_ExistingId_ReturnsPermission() {
         // Arrange
         Long id = 1L;
-        ShoppListUserPermission permission = createSamplePermission();
+        ListPermission permission = createSamplePermission();
         permission.setId(id);
         when(shoppListUserPermissionRepository.findById(id)).thenReturn(Optional.of(permission));
 
         // Act
-        Optional<ShoppListUserPermission> result = shoppListUserPermissionService.findListUserPermissionById(id);
+        Optional<ListPermission> result = listPermissionService.findListUserPermissionById(id);
 
         // Assert
         assertTrue(result.isPresent());
@@ -122,7 +122,7 @@ class ShoppListUserPermissionServiceTest {
         when(shoppListUserPermissionRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(NoSuchElementException.class, () -> shoppListUserPermissionService.findListUserPermissionById(id));
+        assertThrows(NoSuchElementException.class, () -> listPermissionService.findListUserPermissionById(id));
         verify(shoppListUserPermissionRepository, times(1)).findById(id);
     }
 
@@ -130,12 +130,12 @@ class ShoppListUserPermissionServiceTest {
     void removeList_ExistingId_DeletesPermission() {
         // Arrange
         Long id = 1L;
-        ShoppListUserPermission permission = createSamplePermission();
+        ListPermission permission = createSamplePermission();
         permission.setId(id);
         when(shoppListUserPermissionRepository.findById(id)).thenReturn(Optional.of(permission));
 
         // Act
-        shoppListUserPermissionService.removeList(id);
+        listPermissionService.removeList(id);
 
         // Assert
         verify(shoppListUserPermissionRepository, times(1)).findById(id);
@@ -149,7 +149,7 @@ class ShoppListUserPermissionServiceTest {
         when(shoppListUserPermissionRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(NoSuchElementException.class, () -> shoppListUserPermissionService.removeList(id));
+        assertThrows(NoSuchElementException.class, () -> listPermissionService.removeList(id));
         verify(shoppListUserPermissionRepository, times(1)).findById(id);
         verify(shoppListUserPermissionRepository, never()).deleteById(any());
     }
@@ -157,30 +157,30 @@ class ShoppListUserPermissionServiceTest {
     @Test
     void editList_ExistingPermission_ReturnsEditedPermission() {
         // Arrange
-        ShoppListUserPermission permission = createSamplePermission();
+        ListPermission permission = createSamplePermission();
         when(shoppListUserPermissionRepository.findById(permission.getId())).thenReturn(Optional.of(permission));
         when(shoppListUserPermissionRepository.save(permission)).thenReturn(permission);
 
         // Act
-        ShoppListUserPermission result = shoppListUserPermissionService.editList(permission);
+        ListPermission result = listPermissionService.editList(permission);
 
         // Assert
         assertNotNull(result);
         assertEquals(permission, result);
         verify(shoppListUserPermissionRepository, times(1)).findById(permission.getId());
         verify(userService, times(1)).isUserValid(permission.getUser());
-        verify(shoppListService, times(1)).isListValid(permission.getShoppList());
+        verify(shoppingListService, times(1)).isListValid(permission.getShoppList());
         verify(shoppListUserPermissionRepository, times(1)).save(permission);
     }
 
     @Test
     void editList_NonExistingPermission_ThrowsNoSuchElementException() {
         // Arrange
-        ShoppListUserPermission permission = createSamplePermission();
+        ListPermission permission = createSamplePermission();
         when(shoppListUserPermissionRepository.findById(permission.getId())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(NoSuchElementException.class, () -> shoppListUserPermissionService.editList(permission));
+        assertThrows(NoSuchElementException.class, () -> listPermissionService.editList(permission));
         verify(shoppListUserPermissionRepository, times(1)).findById(permission.getId());
         verify(shoppListUserPermissionRepository, never()).save(any());
     }
@@ -188,13 +188,13 @@ class ShoppListUserPermissionServiceTest {
     @Test
     void findAll_MultiplePermissions_ReturnsAllPermissions() {
         // Arrange
-        ShoppListUserPermission permission1 = createSamplePermission();
-        ShoppListUserPermission permission2 = createSamplePermission();
-        List<ShoppListUserPermission> permissions = Arrays.asList(permission1, permission2);
+        ListPermission permission1 = createSamplePermission();
+        ListPermission permission2 = createSamplePermission();
+        List<ListPermission> permissions = Arrays.asList(permission1, permission2);
         when(shoppListUserPermissionRepository.findAll()).thenReturn(permissions);
 
         // Act
-        List<ShoppListUserPermission> result = shoppListUserPermissionService.findAll();
+        List<ListPermission> result = listPermissionService.findAll();
 
         // Assert
         assertEquals(2, result.size());
@@ -203,8 +203,8 @@ class ShoppListUserPermissionServiceTest {
         verify(shoppListUserPermissionRepository, times(1)).findAll();
     }
 
-    private ShoppListUserPermission createSamplePermission() {
-        ShoppListUserPermission permission = new ShoppListUserPermission();
+    private ListPermission createSamplePermission() {
+        ListPermission permission = new ListPermission();
         permission.setId(1L);
         User user = new User();
         user.setId(1L);
