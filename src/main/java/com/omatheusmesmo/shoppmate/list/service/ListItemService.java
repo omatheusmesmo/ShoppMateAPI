@@ -72,7 +72,7 @@ public class ListItemService {
         return ListItem;
     }
 
-    public List<ListItem> findAll() {
-        return ListItemRepository.findAll();
+    public List<ListItem> findAll(Long idList) {
+        return ListItemRepository.findByShoppListId(idList);
     }
 }

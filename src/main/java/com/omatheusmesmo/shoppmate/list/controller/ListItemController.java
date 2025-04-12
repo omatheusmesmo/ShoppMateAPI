@@ -1,66 +1,93 @@
 package com.omatheusmesmo.shoppmate.list.controller;
 
+import com.omatheusmesmo.shoppmate.list.dtos.ListItemRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.ListItemResponseDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ListItem;
+import com.omatheusmesmo.shoppmate.list.mapper.ListItemMapper;
 import com.omatheusmesmo.shoppmate.list.service.ListItemService;
 import com.omatheusmesmo.shoppmate.utils.HttpResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/lists/{shopplistId}/items")
+@RequestMapping("/lists/{listId}/items")
 public class ListItemController {
 
     @Autowired
     private ListItemService service;
 
-    @Operation(description = "Return all ListItems")
+    @Autowired
+    ListItemMapper listItemMapper;
+
+    @Operation(summary = "Get a specific ListItem by its ID within a ShoppingList")
+    @GetMapping("/{id}")
+    public ResponseEntity<ListItemResponseDTO> getListItemById(
+            @PathVariable Long id) {
+
+        ListItem listItem = service.findListItemById(id);
+
+        ListItemResponseDTO responseDTO = listItemMapper.toResponseDTO(listItem);
+        return HttpResponseUtil.ok(responseDTO);
+    }
+
+
+    @Operation(description = "Return all ListItems for a specific ShoppingList")
     @GetMapping
-    public ResponseEntity<List<ListItem>> getAllListItems() {
-        try {
-            List<ListItem> ListItems = service.findAll();
-            return HttpResponseUtil.ok(ListItems);
-        } catch (Exception e) {
-            return HttpResponseUtil.internalServerError();
-        }
+    public ResponseEntity<List<ListItemResponseDTO>> getAllListItemsByListId(@PathVariable Long listId) {
+        List<ListItem> listItems = service.findAll(listId);
+
+        List<ListItemResponseDTO> responseDTOs = listItems.stream()
+                .map(listItemMapper::toResponseDTO)
+                .toList();
+
+        return HttpResponseUtil.ok(responseDTOs);
     }
 
     @Operation(summary = "Add a new ListItem")
     @PostMapping
-    public ResponseEntity<ListItem> addListItem(@RequestBody ListItem ListItem) {
-        try {
-            ListItem addedListItem = service.addShoppItemList(ListItem);
-            return HttpResponseUtil.created(addedListItem);
-        } catch (IllegalArgumentException e) {
-            return HttpResponseUtil.badRequest(ListItem);
-        }
+    public ResponseEntity<ListItemResponseDTO> addListItem(
+            @Valid @RequestBody ListItemRequestDTO requestDTO) {
+
+        ListItem listItem = listItemMapper.toEntity(requestDTO);
+        ListItem addedListItem = service.addShoppItemList(listItem);
+        ListItemResponseDTO responseDTO = listItemMapper.toResponseDTO(addedListItem);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(addedListItem.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(responseDTO);
     }
 
     @Operation(summary = "Delete a ListItem by id")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteListItem(@PathVariable Long id) {
-        try {
-            service.removeList(id);
-            return HttpResponseUtil.noContent();
-        } catch (NoSuchElementException exception) {
-            return HttpResponseUtil.notFound();
-        }
+    public ResponseEntity<Void> deleteListItem(
+            @PathVariable Long id) {
+
+        service.removeList(id);
+        return HttpResponseUtil.noContent();
     }
 
     @Operation(summary = "Update a ListItem")
-    @PutMapping
-    public ResponseEntity<ListItem> updateListItem(@RequestBody ListItem ListItem) {
-        try {
-            service.editList(ListItem);
-            return HttpResponseUtil.ok(ListItem);
-        } catch (NoSuchElementException noSuchElementException) {
-            return HttpResponseUtil.notFound();
-        } catch (IllegalArgumentException illegalArgumentException) {
-            return HttpResponseUtil.badRequest(ListItem);
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<ListItemResponseDTO> updateListItem(
+            @PathVariable Long id,
+            @Valid @RequestBody ListItemRequestDTO requestDTO) {
+        ListItem existingListItem = service.findListItemById(id);
+
+        listItemMapper.updateEntityFromDto(requestDTO, existingListItem);
+
+        ListItem updatedListItem = service.editList(existingListItem);
+        ListItemResponseDTO responseDTO = listItemMapper.toResponseDTO(updatedListItem);
+        return HttpResponseUtil.ok(responseDTO);
     }
 }
