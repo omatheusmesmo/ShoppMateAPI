@@ -22,5 +22,4 @@ public class ListPermission extends BaseAuditableEntity {
 
     @Column(name = "permission_type")
     private Permission permission;
-    private Boolean purchased = false;
 }

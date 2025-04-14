@@ -50,7 +50,7 @@ public class UserService {
 
     public void isUserValid(User user){
         validateIfDataIsNullOrEmpty(user);
-        validateIfUserExists(user.getEmail());
+       // validateIfUserExists(user.getEmail());
     }
 
     public void validateIfUserExists(String email) {
