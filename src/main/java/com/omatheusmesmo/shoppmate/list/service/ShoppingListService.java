@@ -48,13 +48,9 @@ public class ShoppingListService {
         }
     }
 
-    public Optional<ShoppingList> findListById(Long id) {
-        Optional<ShoppingList> foundList = shoppingListRepository.findById(id);
-        if (foundList.isPresent()) {
-            return foundList;
-        } else {
-            throw new NoSuchElementException("ShoppingList not found");
-        }
+    public ShoppingList findListById(Long id) {
+        return shoppingListRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("ShoppingList not found"));
     }
 
     public void removeList(Long id) {

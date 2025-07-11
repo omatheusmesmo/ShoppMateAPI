@@ -1,5 +1,6 @@
 package com.omatheusmesmo.shoppmate.auth.controller;
 
+import com.omatheusmesmo.shoppmate.user.dtos.UserResponseDTO;
 import com.omatheusmesmo.shoppmate.utils.dtos.LoginRequest;
 import com.omatheusmesmo.shoppmate.user.entity.User;
 import com.omatheusmesmo.shoppmate.auth.service.JwtService;
@@ -41,6 +42,14 @@ public class AuthController {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         String token = jwtService.generateToken(user);
+
+        User userSingned = userService.findUserByEmail(loginRequest.getEmail());
+
+
+
+        UserResponseDTO reponse = new UserResponseDTO(userSingned.getId(), userSingned.getFullName(), userSingned.getEmail());
+
+
 
         return ResponseEntity.ok(token);
     }

@@ -2,6 +2,7 @@ package com.omatheusmesmo.shoppmate.list.controller;
 
 import com.omatheusmesmo.shoppmate.list.dtos.ShoppingListRequestDTO;
 import com.omatheusmesmo.shoppmate.list.dtos.ShoppingListResponseDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.UpdateShoppingListRequestDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ShoppingList;
 import com.omatheusmesmo.shoppmate.list.mapper.ListMapper;
 import com.omatheusmesmo.shoppmate.list.service.ShoppingListService;
@@ -38,6 +39,14 @@ public class ShoppingListController {
         return HttpResponseUtil.ok(responseDTOs);
     }
 
+    @Operation(description = "Return a Shopping List by ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<ShoppingListResponseDTO> getShoppingListById(@PathVariable Long id) {
+        ShoppingList shoppingList = service.findListById(id);
+        ShoppingListResponseDTO responseDTO = listMapper.toResponseDTO(shoppingList);
+        return HttpResponseUtil.ok(responseDTO);
+    }
+
     @Operation(summary = "Add a new Shopping List")
     @PostMapping
     public ResponseEntity<ShoppingListResponseDTO> addShoppingList(@Valid @RequestBody ShoppingListRequestDTO dto) {
@@ -62,14 +71,20 @@ public class ShoppingListController {
     }
 
     @Operation(summary = "Update a Shopping List")
-    @PutMapping
-    public ResponseEntity<ShoppingListResponseDTO> updateShoppingList(@Valid @RequestBody ShoppingListRequestDTO requestDTO) {
-        ShoppingList shoppingList = listMapper.toEntity(requestDTO);
+    @PutMapping("/{id}")
+    public ResponseEntity<ShoppingListResponseDTO> updateShoppingList(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateShoppingListRequestDTO requestDTO
+    ) {
 
-        ShoppingList updatedList = service.editList(shoppingList);
+        ShoppingList existingList = service.findListById(id);
+
+        listMapper.updateEntityFromDto(requestDTO, existingList);
+
+        ShoppingList updatedList = service.editList(existingList);
 
         ShoppingListResponseDTO responseDTO = listMapper.toResponseDTO(updatedList);
 
-        return ResponseEntity.ok(responseDTO);
+        return HttpResponseUtil.ok(responseDTO);
     }
 }

@@ -48,6 +48,11 @@ public class UserService {
         }
     }
 
+    public User findUserByEmail(String email){
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found!"));
+    }
+
     public void isUserValid(User user){
         validateIfDataIsNullOrEmpty(user);
        // validateIfUserExists(user.getEmail());
