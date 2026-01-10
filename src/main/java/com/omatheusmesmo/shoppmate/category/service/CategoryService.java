@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -17,21 +18,24 @@ public class CategoryService {
     @Autowired
     private AuditService auditService;
 
-    public void saveCategory(Category category){
+    public Category saveCategory(Category category){
         isCategoryValid(category);
         auditService.setAuditData(category,true);
         categoryRepository.save(category);
+        return category;
     }
 
-    public Optional<Category> findCategoryById(Long id){
-        return categoryRepository.findById(id);
+    public Category findCategoryById(Long id){
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Category not found"));
     }
 
     public Optional<Category> findCategoryByName(String name){
         return categoryRepository.findByName(name);
     }
-    //TODO improve it
-    public void removeCategory(Category category){
+
+    public void removeCategory(Long id){
+        Category category = categoryRepository.findById(id).orElseThrow();
         auditService.softDelete(category);
         saveCategory(category);
     }
