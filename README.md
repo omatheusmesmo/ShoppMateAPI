@@ -76,10 +76,32 @@ ShoppMate is a RESTful API designed to help users manage their shopping lists ef
 
 ### Prerequisites
 
-* Java Development Kit (JDK): Version 17 or higher.
-* Maven: For building and managing the project.
-* PostgreSQL: A running PostgreSQL database instance.
-* Git: For version control.
+* **Java Development Kit (JDK)**: Version 17 (required)
+  * This project uses Java 17 and is configured to automatically switch to it via SDKMAN
+  * If you use SDKMAN, the correct Java version will be activated automatically when you enter the project directory
+* **Maven**: For building and managing the project
+* **PostgreSQL**: A running PostgreSQL database instance
+* **Git**: For version control
+* **SDKMAN** (recommended): For automatic Java version management
+
+### Java Version Management
+
+This project is configured to use **Java 17** automatically via SDKMAN.
+
+**If you use SDKMAN:**
+- The `.sdkmanrc` file ensures the correct Java version is used
+- Enable auto-environment: `sdk config sdkman_auto_env true` (already configured)
+- Java 17 will be activated automatically when you enter the project directory
+- Manual activation: `sdk env`
+
+**If you don't use SDKMAN:**
+- Make sure you have JDK 17 installed and configured
+- Set `JAVA_HOME` to point to your JDK 17 installation
+
+**Verify your Java version:**
+```bash
+java -version  # Should show Java 17
+```
 
 ### Installation
 
@@ -89,6 +111,8 @@ ShoppMate is a RESTful API designed to help users manage their shopping lists ef
     git clone https://github.com/omatheusmesmo/ShoppMateAPI.git
     cd ShoppMateAPI
     ```
+
+    **Note:** If you use SDKMAN with auto-environment enabled, Java 17 will be automatically activated.
 
 2.  Configure the Database:
     * **Create a database in your PostgreSQL instance.**
