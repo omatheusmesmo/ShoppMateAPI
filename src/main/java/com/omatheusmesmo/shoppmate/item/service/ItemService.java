@@ -49,9 +49,9 @@ public class ItemService {
 
     public Item findById(Long id){
         return itemRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Unit not found with id: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Item not found with id: " + id));
     }
-    //TODO remove item by item
+    //TODO remove item by item || Use soft delete
     public void removeItem(Long id) {
         findById(id);
         //auditService.softDelete(item);
