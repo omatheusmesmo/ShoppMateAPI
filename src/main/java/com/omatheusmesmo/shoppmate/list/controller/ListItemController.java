@@ -2,6 +2,7 @@ package com.omatheusmesmo.shoppmate.list.controller;
 
 import com.omatheusmesmo.shoppmate.list.dtos.ListItemRequestDTO;
 import com.omatheusmesmo.shoppmate.list.dtos.ListItemResponseDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.ListItemUpdateRequestDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ListItem;
 import com.omatheusmesmo.shoppmate.list.mapper.ListItemMapper;
 import com.omatheusmesmo.shoppmate.list.service.ListItemService;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-
+// TODO: return only items that are not (soft) deleted
 @RestController
 @RequestMapping("/lists/{listId}/items")
 public class ListItemController {
@@ -54,9 +55,7 @@ public class ListItemController {
     @PostMapping
     public ResponseEntity<ListItemResponseDTO> addListItem(
             @Valid @RequestBody ListItemRequestDTO requestDTO) {
-
-        ListItem listItem = listItemMapper.toEntity(requestDTO);
-        ListItem addedListItem = service.addShoppItemList(listItem);
+        ListItem addedListItem = service.addShoppItemList(requestDTO);
         ListItemResponseDTO responseDTO = listItemMapper.toResponseDTO(addedListItem);
 
         URI location = ServletUriComponentsBuilder
@@ -81,12 +80,10 @@ public class ListItemController {
     @PutMapping("/{id}")
     public ResponseEntity<ListItemResponseDTO> updateListItem(
             @PathVariable Long id,
-            @Valid @RequestBody ListItemRequestDTO requestDTO) {
-        ListItem existingListItem = service.findListItemById(id);
+            @Valid @RequestBody ListItemUpdateRequestDTO requestDTO) {
 
-        listItemMapper.updateEntityFromDto(requestDTO, existingListItem);
+        ListItem updatedListItem = service.editList(id, requestDTO);
 
-        ListItem updatedListItem = service.editList(existingListItem);
         ListItemResponseDTO responseDTO = listItemMapper.toResponseDTO(updatedListItem);
         return HttpResponseUtil.ok(responseDTO);
     }
