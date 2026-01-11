@@ -16,7 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-// TODO: return only items that are not (soft) deleted
+
 @RestController
 @RequestMapping("/lists/{listId}/items")
 public class ListItemController {
