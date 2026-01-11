@@ -1,6 +1,11 @@
 package com.omatheusmesmo.shoppmate.list.service;
 
+import com.omatheusmesmo.shoppmate.item.entity.Item;
+import com.omatheusmesmo.shoppmate.list.dtos.ListItemRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.ListItemUpdateRequestDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ListItem;
+import com.omatheusmesmo.shoppmate.list.entity.ShoppingList;
+import com.omatheusmesmo.shoppmate.list.mapper.ListItemMapper;
 import com.omatheusmesmo.shoppmate.list.repository.ListItemRepository;
 import com.omatheusmesmo.shoppmate.item.service.ItemService;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
@@ -23,17 +28,22 @@ public class ListItemService {
     @Autowired
     private AuditService auditService;
 
-    public ListItem addShoppItemList(ListItem ListItem) {
-        isListItemValid(ListItem);
-        auditService.setAuditData(ListItem, true);
-        ListItemRepository.save(ListItem);
-        return ListItem;
+    @Autowired
+    private ListItemMapper listItemMapper;
+
+    public ListItem addShoppItemList(ListItemRequestDTO listItemRequestDTO) {
+        Item item = itemService.findById(listItemRequestDTO.itemId());
+        ShoppingList shoppingList = shoppingListService.findListById(listItemRequestDTO.listId());
+
+        ListItem listItem = listItemMapper.toEntity(listItemRequestDTO, item, shoppingList);
+
+        isListItemValid(listItem);
+        auditService.setAuditData(listItem, true);
+        ListItemRepository.save(listItem);
+        return listItem;
     }
 
     public void isListItemValid(ListItem ListItem) throws NoSuchElementException {
-        itemService.findById(ListItem.getItem().getId());
-        shoppingListService.findListById(ListItem.getShoppList().getId());
-
         itemService.isItemValid(ListItem.getItem());
         shoppingListService.isListValid(ListItem.getShoppList());
 
@@ -46,16 +56,9 @@ public class ListItemService {
         }
     }
 
-
-    public ListItem findListItem(ListItem ListItem) {
-        return ListItemRepository.findById(ListItem.getId())
-                .orElseThrow(() -> new NoSuchElementException("ListItem not found"));
-
-    }
-
     public ListItem findListItemById(Long id) {
-        return ListItemRepository.findById(id)
-                .orElseThrow(()-> new NoSuchElementException("ShoppingListItem not found"));
+        return ListItemRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(()-> new NoSuchElementException("ListItem not found"));
     }
 
     public void removeList(Long id) {
@@ -64,15 +67,18 @@ public class ListItemService {
         ListItemRepository.save(deletedItem);
     }
 
-    public ListItem editList(ListItem ListItem) {
-        findListItemById(ListItem.getId());
-        isListItemValid(ListItem);
-        auditService.setAuditData(ListItem, false);
-        ListItemRepository.save(ListItem);
-        return ListItem;
+    public ListItem editList(Long id, ListItemUpdateRequestDTO listItemUpdateRequestDTO) {
+        ListItem existingListItem = findListItemById(id);
+
+        existingListItem.setQuantity(listItemUpdateRequestDTO.quantity());
+        existingListItem.setPurchased(listItemUpdateRequestDTO.purchased());
+
+        auditService.setAuditData(existingListItem, false);
+        ListItemRepository.save(existingListItem);
+        return existingListItem;
     }
 
     public List<ListItem> findAll(Long idList) {
-        return ListItemRepository.findByShoppListId(idList);
+        return ListItemRepository.findByShoppListIdAndDeletedFalse(idList);
     }
 }
