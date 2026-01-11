@@ -2,6 +2,7 @@ package com.omatheusmesmo.shoppmate.list.controller;
 
 import com.omatheusmesmo.shoppmate.list.dtos.ListItemRequestDTO;
 import com.omatheusmesmo.shoppmate.list.dtos.ListItemResponseDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.ListItemSummaryDTO;
 import com.omatheusmesmo.shoppmate.list.dtos.ListItemUpdateRequestDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ListItem;
 import com.omatheusmesmo.shoppmate.list.mapper.ListItemMapper;
@@ -41,11 +42,11 @@ public class ListItemController {
 
     @Operation(description = "Return all ListItems for a specific ShoppingList")
     @GetMapping
-    public ResponseEntity<List<ListItemResponseDTO>> getAllListItemsByListId(@PathVariable Long listId) {
+    public ResponseEntity<List<ListItemSummaryDTO>> getAllListItemsByListId(@PathVariable Long listId) {
         List<ListItem> listItems = service.findAll(listId);
 
-        List<ListItemResponseDTO> responseDTOs = listItems.stream()
-                .map(listItemMapper::toResponseDTO)
+        List<ListItemSummaryDTO> responseDTOs = listItems.stream()
+                .map(listItemMapper::toSummaryDTO)
                 .toList();
 
         return HttpResponseUtil.ok(responseDTOs);
