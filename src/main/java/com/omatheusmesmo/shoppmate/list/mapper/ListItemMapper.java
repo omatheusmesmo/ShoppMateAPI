@@ -4,6 +4,7 @@ import com.omatheusmesmo.shoppmate.item.entity.Item;
 import com.omatheusmesmo.shoppmate.item.mapper.ItemMapper;
 import com.omatheusmesmo.shoppmate.list.dtos.ListItemRequestDTO;
 import com.omatheusmesmo.shoppmate.list.dtos.ListItemResponseDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.ListItemSummaryDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ListItem;
 import com.omatheusmesmo.shoppmate.list.entity.ShoppingList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,16 @@ public class ListItemMapper {
                 listItem.getId(),
                 listItem.getQuantity(),
                 listItem.getPurchased()
+        );
+    }
+
+    public ListItemSummaryDTO toSummaryDTO(ListItem listItem) {
+        return new ListItemSummaryDTO(
+            listItem.getId(),
+            listItem.getItem().getId(),
+            listItem.getItem().getName(),
+            listItem.getQuantity(),
+            listItem.getPurchased()
         );
     }
 }
