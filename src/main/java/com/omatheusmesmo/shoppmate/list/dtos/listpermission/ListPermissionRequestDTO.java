@@ -1,4 +1,4 @@
-package com.omatheusmesmo.shoppmate.list.dtos;
+package com.omatheusmesmo.shoppmate.list.dtos.listpermission;
 
 import com.omatheusmesmo.shoppmate.list.entity.Permission;
 import jakarta.validation.constraints.NotNull;
