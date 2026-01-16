@@ -138,7 +138,7 @@ class ListPermissionServiceTest {
         listPermissionService.removeList(id);
 
         verify(ListPermissionRepository, times(1)).findById(id);
-        verify(ListPermissionRepository, times(1)).deleteById(id);
+        verify(ListPermissionRepository, times(1)).save(permission);
     }
 
     @Test
@@ -189,14 +189,14 @@ class ListPermissionServiceTest {
         ListPermission permission1 = createSamplePermission();
         ListPermission permission2 = createSamplePermission();
         List<ListPermission> permissions = Arrays.asList(permission1, permission2);
-        when(ListPermissionRepository.findAll()).thenReturn(permissions);
+        when(ListPermissionRepository.findByShoppingListIdAndDeletedFalse(1L)).thenReturn(permissions);
 
-        List<ListPermission> result = listPermissionService.findAll();
+        List<ListPermission> result = listPermissionService.findAllPermissionsByListId(1L);
 
         assertEquals(2, result.size());
         assertTrue(result.contains(permission1));
         assertTrue(result.contains(permission2));
-        verify(ListPermissionRepository, times(1)).findAll();
+        verify(ListPermissionRepository, times(1)).findByShoppingListIdAndDeletedFalse(1L);
     }
 
     private ListPermission createSamplePermission() {
