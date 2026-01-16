@@ -1,8 +1,9 @@
 package com.omatheusmesmo.shoppmate.list.controller;
 
-import com.omatheusmesmo.shoppmate.list.dtos.ListPermissionRequestDTO;
-import com.omatheusmesmo.shoppmate.list.dtos.ListPermissionResponseDTO;
-import com.omatheusmesmo.shoppmate.list.dtos.ListPermissionUpdateRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.listpermission.ListPermissionRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.listpermission.ListPermissionResponseDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.listpermission.ListPermissionUpdateRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.listpermission.ListPermissionSummaryDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ListPermission;
 import com.omatheusmesmo.shoppmate.list.mapper.ListPermissionMapper;
 import com.omatheusmesmo.shoppmate.list.service.ListPermissionService;
@@ -18,7 +19,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/lists/{shopplistId}/permissions")
+@RequestMapping("/lists/{listId}/permissions")
 public class ListPermissionController {
 
     @Autowired
@@ -29,10 +30,10 @@ public class ListPermissionController {
 
     @Operation(description = "Return all ListPermissions")
     @GetMapping
-    public ResponseEntity<List<ListPermissionResponseDTO>> getAllListPermissions() {
-            List<ListPermission> listPermissions = service.findAll();
-            List<ListPermissionResponseDTO> responseDTOs = listPermissions.stream()
-                    .map(listPermissionMapper::toResponseDTO)
+    public ResponseEntity<List<ListPermissionSummaryDTO>> getAllListPermissions(@PathVariable Long listId) {
+            List<ListPermission> listPermissions = service.findAllPermissionsByListId(listId);
+            List<ListPermissionSummaryDTO> responseDTOs = listPermissions.stream()
+                    .map(listPermissionMapper::toSummaryDTO)
                     .toList();
             return HttpResponseUtil.ok(responseDTOs);
     }
