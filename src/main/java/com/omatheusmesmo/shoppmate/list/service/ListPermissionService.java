@@ -63,8 +63,9 @@ public class ListPermissionService {
     }
 
     public void removeList(Long id) {
-        findListUserPermissionById(id);
-        listPermissionRepository.deleteById(id);
+        ListPermission listPermission = findListUserPermissionById(id);
+        auditService.softDelete(listPermission);
+        listPermissionRepository.save(listPermission);
     }
 
     public ListPermission editList(Long id, ListPermissionUpdateRequestDTO listPermissionUpdateRequestDTO) {
@@ -76,8 +77,7 @@ public class ListPermissionService {
         return listPermission;
     }
 
-    // TODO: return only List Permissions that are not (soft) deleted
-    public List<ListPermission> findAll() {
-        return listPermissionRepository.findAll();
+    public List<ListPermission> findAllPermissionsByListId(Long id) {
+        return listPermissionRepository.findByShoppingListIdAndDeletedFalse(id);
     }
 }
