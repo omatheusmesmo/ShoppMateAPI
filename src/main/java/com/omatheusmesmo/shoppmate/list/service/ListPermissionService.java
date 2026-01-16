@@ -1,9 +1,14 @@
 package com.omatheusmesmo.shoppmate.list.service;
 
+import com.omatheusmesmo.shoppmate.list.dtos.ListPermissionRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.ListPermissionUpdateRequestDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ListPermission;
+import com.omatheusmesmo.shoppmate.list.entity.ShoppingList;
+import com.omatheusmesmo.shoppmate.list.mapper.ListPermissionMapper;
 import com.omatheusmesmo.shoppmate.list.repository.ListPermissionRepository;
-import com.omatheusmesmo.shoppmate.user.service.UserService;
 import com.omatheusmesmo.shoppmate.shared.service.AuditService;
+import com.omatheusmesmo.shoppmate.user.entity.User;
+import com.omatheusmesmo.shoppmate.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +28,15 @@ public class ListPermissionService {
     private UserService userService;
     @Autowired
     private AuditService auditService;
+    @Autowired
+    private ListPermissionMapper listPermissionMapper;
 
-    public ListPermission addListPermission(ListPermission listPermission) {
+    public ListPermission addListPermission(ListPermissionRequestDTO listPermissionRequestDTO) {
+        ShoppingList shoppingList = shoppingListService.findListById(listPermissionRequestDTO.idList());
+        User user = userService.findUserById(listPermissionRequestDTO.idUser());
+
+        ListPermission listPermission = listPermissionMapper.toEntity(listPermissionRequestDTO, shoppingList, user);
+
         isListValid(listPermission);
         auditService.setAuditData(listPermission, true);
         listPermissionRepository.save(listPermission);
@@ -45,13 +57,9 @@ public class ListPermissionService {
         }
     }
 
-    public Optional<ListPermission> findListUserPermissionById(Long id) {
-        Optional<ListPermission> foundList = listPermissionRepository.findById(id);
-        if (foundList.isPresent()) {
-            return foundList;
-        } else {
-            throw new NoSuchElementException("ShoppingListItem not found");
-        }
+    public ListPermission findListUserPermissionById(Long id) {
+        return listPermissionRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("ListPermission not found"));
     }
 
     public void removeList(Long id) {
@@ -59,13 +67,16 @@ public class ListPermissionService {
         listPermissionRepository.deleteById(id);
     }
 
-    public ListPermission editList(ListPermission listPermission) {
-        findListUserPermissionById(listPermission.getId());
+    public ListPermission editList(Long id, ListPermissionUpdateRequestDTO listPermissionUpdateRequestDTO) {
+        ListPermission listPermission = findListUserPermissionById(id);
+        listPermission.setPermission(listPermissionUpdateRequestDTO.permission());
         isListValid(listPermission);
+        auditService.setAuditData(listPermission, false);
         listPermissionRepository.save(listPermission);
         return listPermission;
     }
 
+    // TODO: return only List Permissions that are not (soft) deleted
     public List<ListPermission> findAll() {
         return listPermissionRepository.findAll();
     }
