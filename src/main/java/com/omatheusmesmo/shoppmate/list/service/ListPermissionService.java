@@ -1,7 +1,7 @@
 package com.omatheusmesmo.shoppmate.list.service;
 
-import com.omatheusmesmo.shoppmate.list.dtos.ListPermissionRequestDTO;
-import com.omatheusmesmo.shoppmate.list.dtos.ListPermissionUpdateRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.listpermission.ListPermissionRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.listpermission.ListPermissionUpdateRequestDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ListPermission;
 import com.omatheusmesmo.shoppmate.list.entity.ShoppingList;
 import com.omatheusmesmo.shoppmate.list.mapper.ListPermissionMapper;
