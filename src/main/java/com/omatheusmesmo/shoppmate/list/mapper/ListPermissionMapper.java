@@ -1,9 +1,10 @@
 package com.omatheusmesmo.shoppmate.list.mapper;
 
+import com.omatheusmesmo.shoppmate.list.dtos.listpermission.ListPermissionSummaryDTO;
 import com.omatheusmesmo.shoppmate.user.dtos.UserResponseDTO;
 import com.omatheusmesmo.shoppmate.user.entity.User;
-import com.omatheusmesmo.shoppmate.list.dtos.ListPermissionRequestDTO;
-import com.omatheusmesmo.shoppmate.list.dtos.ListPermissionResponseDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.listpermission.ListPermissionRequestDTO;
+import com.omatheusmesmo.shoppmate.list.dtos.listpermission.ListPermissionResponseDTO;
 import com.omatheusmesmo.shoppmate.list.entity.ListPermission;
 import com.omatheusmesmo.shoppmate.list.entity.ShoppingList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,15 @@ public class ListPermissionMapper {
                 listPermission.getId(),
                 listMapper.toResponseDTO(listPermission.getShoppingList()),
                 userResponseDTO,
+                listPermission.getPermission()
+        );
+    }
+
+    public ListPermissionSummaryDTO toSummaryDTO(ListPermission listPermission){
+        return new ListPermissionSummaryDTO(
+                listPermission.getId(),
+                listPermission.getUser().getFullName(),
+                listPermission.getUser().getEmail(),
                 listPermission.getPermission()
         );
     }
